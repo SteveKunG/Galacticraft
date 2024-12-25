@@ -20,29 +20,23 @@
  * SOFTWARE.
  */
 
-package dev.galacticraft.mod.data.tag;
+package dev.galacticraft.mod.client.render.entity;
 
-import dev.galacticraft.mod.content.GCEntityTypes;
-import dev.galacticraft.mod.tag.GCTags;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
-import net.minecraft.tags.EntityTypeTags;
-import net.minecraft.world.entity.EntityType;
+import dev.galacticraft.mod.Constant;
+import dev.galacticraft.mod.client.render.entity.model.GCEntityModelLayer;
+import dev.galacticraft.mod.client.render.entity.model.SlimelingModel;
+import dev.galacticraft.mod.content.entity.Slimeling;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.resources.ResourceLocation;
 
-import java.util.concurrent.CompletableFuture;
-
-public class GCEntityTypeTagProvider extends IntrinsicHolderTagsProvider<EntityType<?>> {
-
-    public GCEntityTypeTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> provider) {
-        super(output, Registries.ENTITY_TYPE, provider, entityType -> entityType.builtInRegistryHolder().key());
+public class SlimelingRenderer extends MobRenderer<Slimeling, SlimelingModel<Slimeling>> {
+    public SlimelingRenderer(EntityRendererProvider.Context context) {
+        super(context, new SlimelingModel<>(context.bakeLayer(GCEntityModelLayer.SLIMELING)), 0.3f);
     }
 
     @Override
-    protected void addTags(HolderLookup.Provider arg) {
-        tag(GCTags.HAS_FOOTPRINTS)
-                .add(EntityType.PLAYER);
-        this.tag(EntityTypeTags.CAN_BREATHE_UNDER_WATER).add(GCEntityTypes.SLIMELING);
+    public ResourceLocation getTextureLocation(Slimeling entity) {
+        return Constant.id(Constant.EntityTexture.SLIMELING);
     }
 }

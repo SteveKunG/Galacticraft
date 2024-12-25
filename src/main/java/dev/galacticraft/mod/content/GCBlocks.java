@@ -323,6 +323,10 @@ public class GCBlocks {
     public static final AirlockBlock AIR_LOCK_CONTROLLER = BLOCKS.register(Constant.Block.AIR_LOCK_CONTROLLER, new AirlockBlock(true, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
     public static final Block AIR_LOCK_SEAL = BLOCKS.register(Constant.Block.AIR_LOCK_SEAL, new Block(BlockBehaviour.Properties.ofFullCopy(AIR_LOCK_FRAME)));
 
+    public static final Block RED_SLIMELING_EGG = BLOCKS.register(Constant.Block.RED_SLIMELING_EGG, new SlimelingEgg(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(0.75f).sound(SoundType.BASALT), SlimelingEgg.EggColor.RED));
+    public static final Block BLUE_SLIMELING_EGG = BLOCKS.register(Constant.Block.BLUE_SLIMELING_EGG, new SlimelingEgg(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLUE).strength(0.75f).sound(SoundType.BASALT), SlimelingEgg.EggColor.BLUE));
+    public static final Block YELLOW_SLIMELING_EGG = BLOCKS.register(Constant.Block.YELLOW_SLIMELING_EGG, new SlimelingEgg(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(0.75f).sound(SoundType.BASALT), SlimelingEgg.EggColor.YELLOW));
+
     public static Block register(String id, Block block) {
         return Registry.register(BuiltInRegistries.BLOCK, Constant.id(id), block);
     }

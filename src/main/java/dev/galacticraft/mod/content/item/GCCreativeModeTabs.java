@@ -257,6 +257,7 @@ public class GCCreativeModeTabs {
                 output.accept(DESH_SWORD);
                 output.accept(DESH_SHOVEL);
                 output.accept(DESH_PICKAXE);
+                output.accept(STICKY_DESH_PICKAXE);
                 output.accept(DESH_AXE);
                 output.accept(DESH_HOE);
 

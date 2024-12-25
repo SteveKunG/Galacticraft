@@ -213,6 +213,9 @@ public interface Constant {
         String WEB_TORCH = "web_torch";
         String FALLEN_METEOR = "fallen_meteor";
         String SLIMELING_EGG = "slimeling_egg";
+        String RED_SLIMELING_EGG = "red_slimeling_egg";
+        String BLUE_SLIMELING_EGG = "blue_slimeling_egg";
+        String YELLOW_SLIMELING_EGG = "yellow_slimeling_egg";
         String CREEPER_EGG = "creeper_egg";
 
         // Special
@@ -439,6 +442,7 @@ public interface Constant {
         String DESH_SWORD = "desh_sword";
         String DESH_SHOVEL = "desh_shovel";
         String DESH_PICKAXE = "desh_pickaxe";
+        String STICKY_DESH_PICKAXE = "sticky_desh_pickaxe";
         String DESH_AXE = "desh_axe";
         String DESH_HOE = "desh_hoe";
 
@@ -511,6 +515,8 @@ public interface Constant {
         String BASIC_ROCKET_BODY_SCHEMATIC = "basic_rocket_body_schematic";
         String BASIC_ROCKET_FINS_SCHEMATIC = "basic_rocket_fins_schematic";
         String BASIC_ROCKET_ENGINE_SCHEMATIC = "basic_rocket_engine_schematic";
+
+        String SLIMELING_INVENTORY_BAG = "slimeling_inventory_bag";
     }
 
     interface Particle {
@@ -594,6 +600,7 @@ public interface Constant {
         String COMET_CUBE = "comet_cube";
         String GAZER = "gazer";
         String EVOLVED_SKELETON_BOSS = "evolved_skeleton_boss";
+        String SLIMELING = "slimeling";
     }
 
     interface EntityTexture {
@@ -604,6 +611,7 @@ public interface Constant {
         String COMET_CUBE = "textures/entity/comet_cube.png";
         String GAZER = "textures/entity/gazer.png";
         String LANDER = "textures/entity/lander.png";
+        String SLIMELING = "textures/entity/slimeling.png";
         String SKELETON_BOSS = "textures/entity/skeletonboss.png";
     }
 

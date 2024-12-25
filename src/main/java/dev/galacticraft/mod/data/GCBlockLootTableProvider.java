@@ -287,6 +287,9 @@ public class GCBlockLootTableProvider extends FabricBlockLootTableProvider {
         this.add(GCBlocks.AIR_LOCK_SEAL, noDrop());
 
         this.add(GCBlocks.PARACHEST, createParaChestDrop(GCBlocks.PARACHEST));
+        this.add(GCBlocks.RED_SLIMELING_EGG, createSilkTouchOnlyTable(GCBlocks.RED_SLIMELING_EGG));
+        this.add(GCBlocks.BLUE_SLIMELING_EGG, createSilkTouchOnlyTable(GCBlocks.BLUE_SLIMELING_EGG));
+        this.add(GCBlocks.YELLOW_SLIMELING_EGG, createSilkTouchOnlyTable(GCBlocks.YELLOW_SLIMELING_EGG));
     }
 
     private LootTable.Builder createLaunchPadTable(Block block) {

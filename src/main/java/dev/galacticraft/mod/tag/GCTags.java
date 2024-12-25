@@ -71,6 +71,9 @@ public class GCTags {
     public static final TagKey<Item> COMPRESSED_IRON = commonTag("plates/iron");
     public static final TagKey<Item> COMPRESSED_TIN = commonTag("plates/tin");
 
+    public static final TagKey<Item> SLIMELING_FOODS = commonTag("slimeling_foods");
+    public static final TagKey<Item> SLIMELING_FAVORITE_FOODS = commonTag("slimeling_favorite_foods");
+
     public static final TagKey<Structure> MOON_RUINS = TagKey.create(Registries.STRUCTURE, Constant.id("moon_ruins"));
 
     public static final TagKey<DimensionType> FOOTPRINTS_DIMENSIONS = TagKey.create(Registries.DIMENSION_TYPE, Constant.id("footprints"));

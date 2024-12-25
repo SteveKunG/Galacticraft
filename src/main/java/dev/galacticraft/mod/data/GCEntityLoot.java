@@ -185,6 +185,11 @@ public class GCEntityLoot extends GCEntityLootSubProvider {
                 .pool(LootPool.lootPool()
                         .add(LootItem.lootTableItem(Items.ARROW))
                         .build()));
+        add(GCEntityTypes.SLIMELING, LootTable.lootTable()
+                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(Items.SLIME_BALL)
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F))))));
     }
 
     @Override

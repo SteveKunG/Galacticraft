@@ -233,6 +233,9 @@ public class GCItems {
     public static final Item OXYGEN_STORAGE_MODULE = new BlockItem(GCBlocks.OXYGEN_STORAGE_MODULE, new Item.Properties());
     public static final Item FUEL_LOADER = new BlockItem(GCBlocks.FUEL_LOADER, new Item.Properties());
     public static final Item ROCKET_WORKBENCH = new BlockItem(GCBlocks.ROCKET_WORKBENCH, new Item.Properties());
+    public static final Item RED_SLIMELING_EGG = new BlockItem(GCBlocks.RED_SLIMELING_EGG, new Item.Properties());
+    public static final Item BLUE_SLIMELING_EGG = new BlockItem(GCBlocks.BLUE_SLIMELING_EGG, new Item.Properties());
+    public static final Item YELLOW_SLIMELING_EGG = new BlockItem(GCBlocks.YELLOW_SLIMELING_EGG, new Item.Properties());
     // === END BLOCKS ===
     
     // MATERIALS
@@ -353,6 +356,7 @@ public class GCItems {
     public static final Item DESH_SWORD = new SwordItem(GCTiers.DESH, new Item.Properties().attributes(SwordItem.createAttributes(GCTiers.DESH, 3, -2.4F)));
     public static final Item DESH_SHOVEL = new ShovelItem(GCTiers.DESH, new Item.Properties().attributes(ShovelItem.createAttributes(GCTiers.DESH, -1.5F, -3.0F)));
     public static final Item DESH_PICKAXE = new PickaxeItem(GCTiers.DESH, new Item.Properties().attributes(PickaxeItem.createAttributes(GCTiers.DESH, 1.0F, -2.8F)));
+    public static final Item STICKY_DESH_PICKAXE = new PickaxeItem(GCTiers.DESH, new Item.Properties().attributes(PickaxeItem.createAttributes(GCTiers.DESH, 1.0F, -2.8F)));
     public static final Item DESH_AXE = new AxeItem(GCTiers.DESH, new Item.Properties().attributes(AxeItem.createAttributes(GCTiers.DESH, 6.0F, -3.1F)));
     public static final Item DESH_HOE = new HoeItem(GCTiers.DESH, new Item.Properties().attributes(HoeItem.createAttributes(GCTiers.DESH, -3.0F, -1.0F)));
 
@@ -438,6 +442,8 @@ public class GCItems {
     public static final Item MOON_BUGGY_SCHEMATIC = new SchematicItem(new Item.Properties());
     public static final Item TIER_3_ROCKET_SCHEMATIC = new SchematicItem(new Item.Properties());
     public static final Item ASTRO_MINER_SCHEMATIC = new SchematicItem(new Item.Properties());
+
+    public static final Item SLIMELING_INVENTORY_BAG = new Item(new Item.Properties().stacksTo(1));
 
     public static Item registerItem(String id, Item item) {
         return Registry.register(BuiltInRegistries.ITEM, Constant.id(id), item);
@@ -619,6 +625,10 @@ public class GCItems {
         Registry.register(BuiltInRegistries.ITEM, Constant.id(Constant.Block.FUEL_LOADER), FUEL_LOADER);
 
         Registry.register(BuiltInRegistries.ITEM, Constant.id(Constant.Block.ROCKET_WORKBENCH), ROCKET_WORKBENCH);
+
+        Registry.register(BuiltInRegistries.ITEM, Constant.id(Constant.Block.RED_SLIMELING_EGG), RED_SLIMELING_EGG);
+        Registry.register(BuiltInRegistries.ITEM, Constant.id(Constant.Block.BLUE_SLIMELING_EGG), BLUE_SLIMELING_EGG);
+        Registry.register(BuiltInRegistries.ITEM, Constant.id(Constant.Block.YELLOW_SLIMELING_EGG), YELLOW_SLIMELING_EGG);
         // === END BLOCKS ===
 
         // MATERIALS
@@ -724,6 +734,7 @@ public class GCItems {
         Registry.register(BuiltInRegistries.ITEM, Constant.id(Constant.Item.DESH_SWORD), DESH_SWORD);
         Registry.register(BuiltInRegistries.ITEM, Constant.id(Constant.Item.DESH_SHOVEL), DESH_SHOVEL);
         Registry.register(BuiltInRegistries.ITEM, Constant.id(Constant.Item.DESH_PICKAXE), DESH_PICKAXE);
+        Registry.register(BuiltInRegistries.ITEM, Constant.id(Constant.Item.STICKY_DESH_PICKAXE), STICKY_DESH_PICKAXE);
         Registry.register(BuiltInRegistries.ITEM, Constant.id(Constant.Item.DESH_AXE), DESH_AXE);
         Registry.register(BuiltInRegistries.ITEM, Constant.id(Constant.Item.DESH_HOE), DESH_HOE);
 
@@ -779,6 +790,8 @@ public class GCItems {
         Registry.register(BuiltInRegistries.ITEM, Constant.id(Constant.Block.AIR_LOCK_FRAME), AIR_LOCK_FRAME);
         Registry.register(BuiltInRegistries.ITEM, Constant.id(Constant.Block.AIR_LOCK_CONTROLLER), AIR_LOCK_CONTROLLER);
         Registry.register(BuiltInRegistries.ITEM, Constant.id(Constant.Block.AIR_LOCK_SEAL), AIR_LOCK_SEAL);
+
+        Registry.register(BuiltInRegistries.ITEM, Constant.id(Constant.Item.SLIMELING_INVENTORY_BAG), SLIMELING_INVENTORY_BAG);
 
         DispenserBlock.registerBehavior(FUEL_BUCKET, DispenserBlock.DISPENSER_REGISTRY.get(Items.WATER_BUCKET));
         DispenserBlock.registerBehavior(CRUDE_OIL_BUCKET, DispenserBlock.DISPENSER_REGISTRY.get(Items.WATER_BUCKET));

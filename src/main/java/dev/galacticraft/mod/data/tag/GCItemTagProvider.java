@@ -32,6 +32,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -65,6 +66,7 @@ public class GCItemTagProvider extends FabricTagProvider.ItemTagProvider {
         tag(ItemTags.CLUSTER_MAX_HARVESTABLES)
                 .add(GCItems.HEAVY_DUTY_PICKAXE)
                 .add(GCItems.DESH_PICKAXE)
+                .add(GCItems.STICKY_DESH_PICKAXE)
                 .add(GCItems.TITANIUM_PICKAXE);
         tag(ItemTags.TRIMMABLE_ARMOR)
                 .add(GCItems.HEAVY_DUTY_HELMET)
@@ -105,6 +107,20 @@ public class GCItemTagProvider extends FabricTagProvider.ItemTagProvider {
         //        "galacticraft:legacy_music_disc_mimas",
         //        "galacticraft:legacy_music_disc_orbit",
         //        "galacticraft:legacy_music_disc_spacerace"
+
+        this.tag(GCTags.SLIMELING_FAVORITE_FOODS)
+                .add(
+                        Items.GOLD_INGOT,
+                        Items.FLINT_AND_STEEL,
+                        Items.BAKED_POTATO,
+                        Items.STONE_SWORD,
+                        Items.GUNPOWDER,
+                        Items.WOODEN_HOE,
+                        Items.EMERALD,
+                        Items.REPEATER
+                ).forceAddTag(ItemTags.FISHES).forceAddTag(ItemTags.BOATS);
+
+        this.tag(GCTags.SLIMELING_FOODS).add(Items.SLIME_BALL);
 
         // Ore Tags
         tag(ConventionalItemTags.ORES).add(

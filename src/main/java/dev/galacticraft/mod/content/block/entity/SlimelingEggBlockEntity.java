@@ -20,29 +20,43 @@
  * SOFTWARE.
  */
 
-package dev.galacticraft.mod.data.tag;
+package dev.galacticraft.mod.content.block.entity;
 
-import dev.galacticraft.mod.content.GCEntityTypes;
-import dev.galacticraft.mod.tag.GCTags;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import java.util.UUID;
+
+import org.jetbrains.annotations.Nullable;
+import dev.galacticraft.mod.content.GCBlockEntityTypes;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
-import net.minecraft.tags.EntityTypeTags;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.concurrent.CompletableFuture;
+public class SlimelingEggBlockEntity extends BlockEntity {
+    private static final String OWNER_TAG = "Owner";
 
-public class GCEntityTypeTagProvider extends IntrinsicHolderTagsProvider<EntityType<?>> {
+    @Nullable
+    public UUID ownerUUID;
 
-    public GCEntityTypeTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> provider) {
-        super(output, Registries.ENTITY_TYPE, provider, entityType -> entityType.builtInRegistryHolder().key());
+    public SlimelingEggBlockEntity(BlockPos pos, BlockState blockState) {
+        super(GCBlockEntityTypes.SLIMELING_EGG, pos, blockState);
     }
 
     @Override
-    protected void addTags(HolderLookup.Provider arg) {
-        tag(GCTags.HAS_FOOTPRINTS)
-                .add(EntityType.PLAYER);
-        this.tag(EntityTypeTags.CAN_BREATHE_UNDER_WATER).add(GCEntityTypes.SLIMELING);
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.loadAdditional(tag, provider);
+
+        if (tag.hasUUID(OWNER_TAG)) {
+            this.ownerUUID = tag.getUUID(OWNER_TAG);
+        }
+    }
+
+    @Override
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.saveAdditional(tag, provider);
+
+        if (this.ownerUUID != null) {
+            tag.putUUID(OWNER_TAG, this.ownerUUID);
+        }
     }
 }

@@ -81,6 +81,9 @@ public class GCEntityTypes {
     public static final EntityType<ArchGreyEntity> ARCH_GREY = ENTITIES.register(Entity.ARCH_GREY, EntityType.Builder.of(ArchGreyEntity::new, MobCategory.CREATURE)
             .sized(0.6F, 1.55F)
             .build());
+    public static final EntityType<Slimeling> SLIMELING = ENTITIES.register(Entity.SLIMELING, EntityType.Builder.of(Slimeling::new, MobCategory.CREATURE)
+            .sized(0.45F, 0.7F)
+            .build());
 
     public static final EntityType<BubbleEntity> BUBBLE = ENTITIES.register(Entity.BUBBLE, EntityType.Builder.of(BubbleEntity::new, MobCategory.MISC)
             .fireImmune()
@@ -134,6 +137,7 @@ public class GCEntityTypes {
         FabricDefaultAttributeRegistry.register(EVOLVED_PILLAGER, EvolvedPillagerEntity.createAttributes().add(GcApiEntityAttributes.CAN_BREATHE_IN_SPACE, 1.0D).add(Attributes.MAX_HEALTH, 25.0D));
         FabricDefaultAttributeRegistry.register(EVOLVED_EVOKER, EvolvedEvokerEntity.createAttributes().add(GcApiEntityAttributes.CAN_BREATHE_IN_SPACE, 1.0D).add(Attributes.MAX_HEALTH, 25.0D));
         FabricDefaultAttributeRegistry.register(EVOLVED_VINDICATOR, EvolvedVindicatorEntity.createAttributes().add(GcApiEntityAttributes.CAN_BREATHE_IN_SPACE, 1.0D).add(Attributes.MAX_HEALTH, 25.0D));
+        FabricDefaultAttributeRegistry.register(SLIMELING, Slimeling.createAttributes().add(GcApiEntityAttributes.CAN_BREATHE_IN_SPACE, 1.0D));
         FabricDefaultAttributeRegistry.register(GAZER, GazerEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(RUMBLER, RumblerEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(COMET_CUBE, CometCubeEntity.createAttributes());
