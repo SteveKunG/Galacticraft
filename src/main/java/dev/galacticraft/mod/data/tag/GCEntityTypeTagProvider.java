@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2024 Team Galacticraft
+ * Copyright (c) 2019-2025 Team Galacticraft
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -43,6 +43,8 @@ public class GCEntityTypeTagProvider extends IntrinsicHolderTagsProvider<EntityT
     protected void addTags(HolderLookup.Provider arg) {
         tag(GCTags.HAS_FOOTPRINTS)
                 .add(EntityType.PLAYER);
+        tag(EntityTypeTags.FALL_DAMAGE_IMMUNE)
+                .add(GCEntityTypes.LANDER);
         this.tag(EntityTypeTags.CAN_BREATHE_UNDER_WATER).add(GCEntityTypes.SLIMELING);
     }
 }
