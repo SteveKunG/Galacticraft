@@ -22,12 +22,13 @@
 
 package dev.galacticraft.mod.content.entity;
 
-import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
-
 import com.google.common.collect.ImmutableList;
 import com.mojang.authlib.GameProfile;
-
+import dev.galacticraft.mod.content.GCEntityTypes;
+import dev.galacticraft.mod.content.GCSounds;
+import dev.galacticraft.mod.content.block.special.SlimelingEgg;
+import dev.galacticraft.mod.content.item.GCItems;
+import dev.galacticraft.mod.tag.GCTags;
 import net.minecraft.Util;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -53,23 +54,44 @@ import net.minecraft.world.entity.monster.Ghast;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-
-import dev.galacticraft.mod.content.GCEntityTypes;
-import dev.galacticraft.mod.content.GCSounds;
-import dev.galacticraft.mod.content.block.special.SlimelingEgg;
-import dev.galacticraft.mod.content.item.GCItems;
-import dev.galacticraft.mod.tag.GCTags;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 public class Slimeling extends TamableAnimal implements ContainerListener, HasCustomInventoryScreen {
-    protected SimpleContainer inventory;
-
     private static final EntityDataAccessor<Boolean> HAS_BAG = SynchedEntityData.defineId(Slimeling.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Vector3f> COLOR = SynchedEntityData.defineId(Slimeling.class, EntityDataSerializers.VECTOR3);
     private static final EntityDataAccessor<ItemStack> FAVORITE_FOOD = SynchedEntityData.defineId(Slimeling.class, EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<Integer> KILLS = SynchedEntityData.defineId(Slimeling.class, EntityDataSerializers.INT);
+    public static final String HAS_BAG_TAG = "HasBag";
+    public static final String FAVORITE_FOOD_TAG = "FavoriteFood";
+    public static final String COLOR_TAG = "Color";
+    public static final String KILL_COUNT_TAG = "KillCount";
+
+    public final int MAX_AGE = 100000;
+    protected SimpleContainer inventory;
+
+    public Slimeling(EntityType<? extends Slimeling> entityType, Level level) {
+        super(entityType, level);
+        this.createInventory();
+        //        this.tasks.addTask(1, new EntityAISwimming(this));
+        //        this.aiSit = new EntityAISitGC(this);
+        //        this.tasks.addTask(2, this.aiSit);
+        //        this.tasks.addTask(3, new EntityAILeapAtTarget(this, 0.4F));
+        //        this.tasks.addTask(4, new EntityAIAttackMelee(this, 1.0D, true));
+        //        this.tasks.addTask(5, new EntityAIFollowOwner(this, 1.0D, 10.0F, 2.0F));
+        //        this.tasks.addTask(6, new EntityAIMate(this, 1.0D));
+        //        this.tasks.addTask(7, new EntityAIWander(this, 1.0D));
+        //        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+        //        this.tasks.addTask(9, new EntityAILookIdle(this));
+        //        this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
+        //        this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
+        //        this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, true));
+        //        this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntitySludgeling.class, false, p_apply_1_ -> p_apply_1_ instanceof EntitySludgeling));
+    }
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.3F).add(Attributes.MAX_HEALTH, 8.0).add(Attributes.ATTACK_DAMAGE, 2.0);
@@ -87,23 +109,23 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
     @Override
     protected void dropEquipment() {
         super.dropEquipment();
+
         if (this.inventory != null) {
             for (var i = 0; i < this.inventory.getContainerSize(); ++i) {
                 var itemStack = this.inventory.getItem(i);
-//                if (!itemStack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(itemStack)) {TODO
-//                    this.spawnAtLocation(itemStack);
-//                }
+
+                if (!itemStack.isEmpty() && !EnchantmentHelper.has(itemStack, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP)) {
+                    this.spawnAtLocation(itemStack);
+                }
             }
         }
     }
 
-    public int getKillCount()
-    {
+    public int getKillCount() {
         return this.entityData.get(KILLS);
     }
 
-    public void setKillCount(int killCount)
-    {
+    public void setKillCount(int killCount) {
         this.entityData.set(KILLS, killCount);
     }
 
@@ -123,8 +145,6 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
         this.entityData.set(FAVORITE_FOOD, itemStack);
     }
 
-    public final int MAX_AGE = 100000;
-
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData) {
         var randomSource = level.getRandom();
@@ -137,26 +157,6 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
 
     public ItemStack getRandomFavoriteFood(RandomSource randomSource) {
         return new ItemStack(Util.getRandom(ImmutableList.copyOf(BuiltInRegistries.ITEM.getTagOrEmpty(GCTags.SLIMELING_FAVORITE_FOODS)), randomSource).value());
-    }
-
-    public Slimeling(EntityType<? extends Slimeling> entityType, Level level)
-    {
-        super(entityType, level);
-        this.createInventory();
-        //        this.tasks.addTask(1, new EntityAISwimming(this));
-        //        this.aiSit = new EntityAISitGC(this);
-        //        this.tasks.addTask(2, this.aiSit);
-        //        this.tasks.addTask(3, new EntityAILeapAtTarget(this, 0.4F));
-        //        this.tasks.addTask(4, new EntityAIAttackMelee(this, 1.0D, true));
-        //        this.tasks.addTask(5, new EntityAIFollowOwner(this, 1.0D, 10.0F, 2.0F));
-        //        this.tasks.addTask(6, new EntityAIMate(this, 1.0D));
-        //        this.tasks.addTask(7, new EntityAIWander(this, 1.0D));
-        //        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-        //        this.tasks.addTask(9, new EntityAILookIdle(this));
-        //        this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
-        //        this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
-        //        this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, true));
-        //        this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntitySludgeling.class, false, p_apply_1_ -> p_apply_1_ instanceof EntitySludgeling));
     }
 
     public boolean hasBag() {
@@ -174,6 +174,7 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
     protected void createInventory() {
         var simpleContainer = this.inventory;
         this.inventory = new SimpleContainer(this.getInventorySize());
+
         if (simpleContainer != null) {
             simpleContainer.removeListener(this);
             var i = Math.min(simpleContainer.getContainerSize(), this.inventory.getContainerSize());
@@ -187,18 +188,11 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
         }
 
         this.inventory.addListener(this);
-        //        this.updateContainerEquipment();
     }
 
-    public float getSlimelingSize()
-    {
+    public float getSlimelingSize() {
         return this.getScale() * 2.0F;
     }
-
-    private static final String HAS_BAG_TAG = "HasBag";
-    private static final String FAVORITE_FOOD_TAG = "FavoriteFood";
-    private static final String COLOR_TAG = "Color";
-    private static final String KILL_COUNT_TAG = "KillCount";
 
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
@@ -211,13 +205,12 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
         if (this.hasBag()) {
             var listTag = new ListTag();
 
-            for (var i = 2; i < this.inventory.getContainerSize(); ++i) {
+            for (var i = 1; i < this.inventory.getContainerSize(); ++i) {
                 var itemStack = this.inventory.getItem(i);
                 if (!itemStack.isEmpty()) {
                     var compoundTag = new CompoundTag();
                     compoundTag.putByte("Slot", (byte) i);
-                    //itemStack.save(compoundTag);TODO
-                    listTag.add(compoundTag);
+                    listTag.add(itemStack.save(this.registryAccess(), compoundTag));
                 }
             }
 
@@ -229,7 +222,7 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setHasBag(compound.getBoolean(HAS_BAG_TAG));
-        //this.setFavoriteFood(ItemStack.of(compound.getCompound(FAVORITE_FOOD_TAG)));
+        this.setFavoriteFood(ItemStack.parse(this.registryAccess(), compound.getCompound(FAVORITE_FOOD_TAG)).orElse(ItemStack.EMPTY));
         this.setKillCount(compound.getInt(KILL_COUNT_TAG));
 
         var colorListTag = compound.getList(COLOR_TAG, Tag.TAG_FLOAT);
@@ -244,12 +237,10 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
                 var compoundTag = listTag.getCompound(i);
                 var j = compoundTag.getByte("Slot") & 255;
                 if (j >= 2 && j < this.inventory.getContainerSize()) {
-                    //this.inventory.setItem(j, ItemStack.of(compoundTag));
+                    this.inventory.setItem(j + 1, ItemStack.parse(this.registryAccess(), compoundTag).orElse(ItemStack.EMPTY));
                 }
             }
         }
-
-        //        this.updateContainerEquipment();
     }
 
     @Override
@@ -294,28 +285,24 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
     //    }
 
     @Override
-    protected SoundEvent getHurtSound(DamageSource damageSource)
-    {
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
         return SoundEvents.SLIME_BLOCK_STEP;
     }
 
     @Override
-    protected SoundEvent getDeathSound()
-    {
+    protected SoundEvent getDeathSound() {
         return GCSounds.ENTITY_SLIME_DEATH;
     }
 
     @Override
-    public void aiStep()
-    {
+    public void aiStep() {
         super.aiStep();
 
         if (!this.level().isClientSide()) {
         }
     }
 
-    private double getMaxHealthSlimeling()
-    {
+    private double getMaxHealthSlimeling() {
         if (this.isTame()) {
             return 20.001D + 30.0 * ((double) this.age / (double) this.MAX_AGE);
         } else {
@@ -323,11 +310,11 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
         }
     }
 
-//    @Override
-//    public float getStandingEyeHeight(Pose pose, EntityDimensions dimensions)
-//    {
-//        return dimensions.height * 0.8F;
-//    }
+    //    @Override
+    //    public float getStandingEyeHeight(Pose pose, EntityDimensions dimensions)
+    //    {
+    //        return dimensions.height * 0.8F;
+    //    }
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
@@ -335,7 +322,7 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
             return false;
         } else {
             var entity = source.getEntity();
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 this.setOrderedToSit(false);
             }
 
@@ -351,21 +338,19 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
     public boolean doHurtTarget(Entity target) {
         var bl = target.hurt(this.damageSources().mobAttack(this), (float) (int) this.getAttributeValue(Attributes.ATTACK_DAMAGE));
         if (bl) {
-//            this.doEnchantDamageEffects(this, target);
+            //            this.doEnchantDamageEffects(this, target);
         }
 
         return bl;
     }
 
-    public float getDamage()
-    {
+    public float getDamage() {
         var i = this.isTame() ? 5 : 2;
         return (float) (i * this.getAttributeValue(Attributes.ATTACK_DAMAGE));
     }
 
     @Override
-    public InteractionResult mobInteract(Player player, InteractionHand hand)
-    {
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
         var itemStack = player.getItemInHand(hand);
 
         if (this.isTame()) {
@@ -437,14 +422,12 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
         return super.mobInteract(player, hand);
     }
 
-    public String getOwnerUsername()
-    {
-        if (this.getServer() != null)
-        {
+    public String getOwnerUsername() {
+        if (this.getServer() != null) {
             var gameProfileCache = this.getServer().getProfileCache();
             if (gameProfileCache != null) {
                 var optional = gameProfileCache.get(this.getOwnerUUID());
-                 return optional.map(GameProfile::getName).orElse("");
+                return optional.map(GameProfile::getName).orElse("");
             }
         }
         return "";
@@ -529,8 +512,7 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
         }
     }
 
-    public float getScale()
-    {
+    public float getScale() {
         return this.getAge() / (float) this.MAX_AGE * 0.5F + 0.5F;
     }
 
