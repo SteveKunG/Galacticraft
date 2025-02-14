@@ -26,7 +26,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.authlib.GameProfile;
 import dev.galacticraft.mod.content.GCEntityTypes;
 import dev.galacticraft.mod.content.GCSounds;
-import dev.galacticraft.mod.content.block.special.SlimelingEgg;
+import dev.galacticraft.mod.content.block.special.slimeling_egg.SlimelingEggColor;
 import dev.galacticraft.mod.content.item.GCItems;
 import dev.galacticraft.mod.tag.GCTags;
 import net.minecraft.Util;
@@ -149,7 +149,7 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData) {
         var randomSource = level.getRandom();
 
-        this.setColor(SlimelingEgg.EggColor.getRandomColor(randomSource));
+        this.setColor(SlimelingEggColor.getRandomColor(randomSource));
         this.setFavoriteFood(this.getRandomFavoriteFood(randomSource));
 
         return super.finalizeSpawn(level, difficulty, reason, spawnData);

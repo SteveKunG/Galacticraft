@@ -20,12 +20,8 @@
  * SOFTWARE.
  */
 
-package dev.galacticraft.mod.content.block.special;
+package dev.galacticraft.mod.content.block.special.slimeling_egg;
 
-
-import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.galacticraft.mod.content.GCEntityTypes;
@@ -39,13 +35,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ambient.Bat;
-import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -65,20 +58,21 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 
 public class SlimelingEgg extends BaseEntityBlock implements SimpleWaterloggedBlock {
     public static final MapCodec<SlimelingEgg> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             propertiesCodec(),
-            EggColor.CODEC.fieldOf("color").forGetter(slimelingEgg -> slimelingEgg.eggColor)
+            SlimelingEggColor.CODEC.fieldOf("color").forGetter(slimelingEgg -> slimelingEgg.eggColor)
     ).apply(instance, SlimelingEgg::new));
     public static final IntegerProperty HATCH = BlockStateProperties.HATCH;
     public static final BooleanProperty CRACKED = BooleanProperty.create("cracked");
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     private static final VoxelShape SHAPE = Shapes.box(0.25, 0.0, 0.25, 0.75, 0.625, 0.75);
 
-    private final EggColor eggColor;
+    private final SlimelingEggColor eggColor;
 
-    public SlimelingEgg(Properties properties, EggColor eggColor) {
+    public SlimelingEgg(Properties properties, SlimelingEggColor eggColor) {
         super(properties);
         this.eggColor = eggColor;
         this.registerDefaultState(this.getStateDefinition().any().setValue(WATERLOGGED, false).setValue(CRACKED, false).setValue(HATCH, 0));
@@ -114,7 +108,7 @@ public class SlimelingEgg extends BaseEntityBlock implements SimpleWaterloggedBl
                     var vec3 = pos.getCenter();
                     slimeling.setOwnerUUID(slimelingEgg.ownerUUID);
                     slimeling.setTame(true, true);
-                    slimeling.setColor(this.eggColor.byColor());
+                    slimeling.setColor(this.eggColor.color());
                     slimeling.setHealth(20.0F);
                     slimeling.moveTo(vec3.x(), vec3.y(), vec3.z(), Mth.wrapDegrees(random.nextFloat() * 360.0F), 0.0F);
 
@@ -242,45 +236,5 @@ public class SlimelingEgg extends BaseEntityBlock implements SimpleWaterloggedBl
 
     private boolean isReadyToHatch(BlockState state) {
         return this.getHatchLevel(state) == 2;
-    }
-
-    public enum EggColor implements StringRepresentable {
-        RED("red"),
-        BLUE("blue"),
-        YELLOW("yellow");
-
-        public static final Codec<EggColor> CODEC = StringRepresentable.fromEnum(EggColor::values);
-
-        private final String name;
-
-        public static final Vector3f RED_COLOR = new Vector3f(1.0f, 0.0f, 0.0f);
-        public static final Vector3f BLUE_COLOR = new Vector3f(0.0f, 0.0f, 1.0f);
-        public static final Vector3f YELLOW_COLOR = new Vector3f(1.0f, 1.0f, 0.0f);
-
-        EggColor(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String getSerializedName() {
-            return this.name;
-        }
-
-        public Vector3f byColor() {
-            return switch (this) {
-                case RED -> RED_COLOR;
-                case BLUE -> BLUE_COLOR;
-                case YELLOW -> YELLOW_COLOR;
-            };
-        }
-
-        public static Vector3f getRandomColor(RandomSource randomSource) {
-            return switch (randomSource.nextInt(3)) {
-                case 0 -> RED_COLOR;
-                case 1 -> BLUE_COLOR;
-                case 2 -> YELLOW_COLOR;
-                default -> new Vector3f();
-            };
-        }
     }
 }
