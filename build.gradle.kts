@@ -52,9 +52,9 @@ val objVersion               = project.property("obj.version").toString()
 plugins {
     java
     `maven-publish`
-    id("fabric-loom") version("1.7-SNAPSHOT")
+    id("fabric-loom") version("1.10-SNAPSHOT")
     id("org.cadixdev.licenser") version("0.6.1")
-    id("org.ajoberstar.grgit") version("5.2.2")
+    id("org.ajoberstar.grgit") version("5.3.0")
     id("dev.galacticraft.mojarn") version("0.5.0+13")
 }
 
@@ -244,8 +244,8 @@ dependencies {
     }
 
     multicompat(group = "mezz.jei",
-            api = "jei-1.21-common-api",
-            extra = "jei-1.21-fabric-api",
+            api = "jei-1.21.1-common-api",
+            extra = "jei-1.21.1-fabric-api",
 //            runtime = "jei-$minecraftVersion-fabric", // we already have REI at runtime
             version = jeiVersion) {
         exclude(group = "net.fabricmc.fabric-api")
