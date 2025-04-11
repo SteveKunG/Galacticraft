@@ -45,7 +45,7 @@ public record SlimelingEggColor(String name, Vector3f color) {
     public static final SlimelingEggColor BLUE = register(new SlimelingEggColor("green", new Vector3f(0.0f, 0.0f, 1.0f)));
     public static final SlimelingEggColor YELLOW = register(new SlimelingEggColor("yellow", new Vector3f(1.0f, 1.0f, 0.0f)));
 
-    private static SlimelingEggColor register(SlimelingEggColor color) {
+    public static SlimelingEggColor register(SlimelingEggColor color) {
         COLORS.put(color.name(), color);
         return color;
     }
