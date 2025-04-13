@@ -379,6 +379,11 @@ public class GCCreativeModeTabs {
                 output.accept(MARS_COBBLESTONE_STAIRS);
                 output.accept(MARS_COBBLESTONE_WALL);
 
+                // SLIMELING
+                output.accept(RED_SLIMELING_EGG);
+                output.accept(BLUE_SLIMELING_EGG);
+                output.accept(YELLOW_SLIMELING_EGG);
+
                 // ASTEROID NATURAL
                 output.accept(ASTEROID_ROCK);
                 output.accept(ASTEROID_ROCK_1);

@@ -26,4 +26,5 @@ import net.minecraft.data.models.model.TextureSlot;
 
 public final class GCTextureSlot {
     public static final TextureSlot COLOR = TextureSlot.create("color");
+    public static final TextureSlot EGG = TextureSlot.create("egg");
 }

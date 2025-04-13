@@ -22,6 +22,8 @@
 
 package dev.galacticraft.mod.content.block.special.slimeling_egg;
 
+import java.util.stream.Stream;
+
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.galacticraft.mod.content.GCEntityTypes;
@@ -55,6 +57,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -68,7 +71,14 @@ public class SlimelingEgg extends BaseEntityBlock implements SimpleWaterloggedBl
     public static final IntegerProperty HATCH = BlockStateProperties.HATCH;
     public static final BooleanProperty CRACKED = BooleanProperty.create("cracked");
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-    private static final VoxelShape SHAPE = Shapes.box(0.25, 0.0, 0.25, 0.75, 0.625, 0.75);
+    private static final VoxelShape SHAPE = Stream.of(
+            Block.box(3.5, 0, 2, 12.5, 6.5, 3),
+            Block.box(4, 8, 4, 12, 10.5, 12),
+            Block.box(3, 0, 3, 13, 8, 13),
+            Block.box(13, 0, 4, 14.5, 6.5, 12),
+            Block.box(1.5, 0, 4, 3, 6.5, 12),
+            Block.box(3.5, 0, 13, 12.5, 6.5, 14)
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     private final SlimelingEggColor eggColor;
 

@@ -37,6 +37,7 @@ import dev.galacticraft.mod.content.block.machine.FuelLoaderBlock;
 import dev.galacticraft.mod.content.block.machine.ResourceStorageBlock;
 import dev.galacticraft.mod.content.block.special.ParachestBlock;
 import dev.galacticraft.mod.content.block.special.launchpad.AbstractLaunchPad;
+import dev.galacticraft.mod.content.block.special.slimeling_egg.SlimelingEgg;
 import dev.galacticraft.mod.content.item.GCItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
@@ -359,6 +360,20 @@ public class GCModelProvider extends FabricModelProvider {
         this.createAirLockController(generator);
 
         this.createParachests(generator);
+
+        this.createSlimelingEggModel(generator, GCBlocks.RED_SLIMELING_EGG);
+        this.createSlimelingEggModel(generator, GCBlocks.BLUE_SLIMELING_EGG);
+        this.createSlimelingEggModel(generator, GCBlocks.YELLOW_SLIMELING_EGG);
+    }
+
+    private void createSlimelingEggModel(BlockModelGenerators generator, Block block) {
+        var mapping = new TextureMapping().put(GCTextureSlot.EGG, ModelLocationUtils.getModelLocation(block));
+        var eggModel = GCModelTemplates.SLIMELING_EGG.create(ModelLocationUtils.getModelLocation(block), mapping, generator.modelOutput);
+
+        generator.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block)
+                .with(PropertyDispatch.property(SlimelingEgg.CRACKED)
+                        .select(true, Variant.variant().with(VariantProperties.MODEL, eggModel))
+                        .select(false, Variant.variant().with(VariantProperties.MODEL, eggModel))));
     }
 
     private static void createFullCubeActiveMachine(BlockModelGenerators generator, Block block) {
