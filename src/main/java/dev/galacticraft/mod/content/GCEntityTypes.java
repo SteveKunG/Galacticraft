@@ -121,7 +121,7 @@ public class GCEntityTypes {
             .clientTrackingRange(8)
             .build());
     public static final EntityType<Slimeling> SLIMELING = ENTITIES.register(Entity.SLIMELING, EntityType.Builder.of(Slimeling::new, MobCategory.CREATURE)
-            .sized(0.45F, 0.7F)
+            .sized(1.0F, 1.0F)
             .build());
 
     public static final EntityType<BubbleEntity> BUBBLE = ENTITIES.register(Entity.BUBBLE, EntityType.Builder.of(BubbleEntity::new, MobCategory.MISC)

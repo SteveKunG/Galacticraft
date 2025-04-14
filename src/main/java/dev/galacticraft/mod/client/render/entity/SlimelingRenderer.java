@@ -22,13 +22,16 @@
 
 package dev.galacticraft.mod.client.render.entity;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import dev.galacticraft.mod.Constant;
 import dev.galacticraft.mod.client.model.entity.SlimelingModel;
 import dev.galacticraft.mod.client.render.entity.model.GCEntityModelLayer;
 import dev.galacticraft.mod.content.entity.Slimeling;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 
 public class SlimelingRenderer extends MobRenderer<Slimeling, SlimelingModel<Slimeling>> {
     public SlimelingRenderer(EntityRendererProvider.Context context) {
@@ -38,5 +41,12 @@ public class SlimelingRenderer extends MobRenderer<Slimeling, SlimelingModel<Sli
     @Override
     public ResourceLocation getTextureLocation(Slimeling entity) {
         return Constant.id(Constant.EntityTexture.SLIMELING);
+    }
+
+    @Override
+    public void render(Slimeling entity, float yaw, float partialTick, PoseStack poseStack, MultiBufferSource multiBufferSource, int packedLight) {
+        var color = entity.getColor();
+        this.model.setColor(FastColor.ARGB32.colorFromFloat(1.0f, color.x(), color.y(), color.z()));
+        super.render(entity, yaw, partialTick, poseStack, multiBufferSource, packedLight);
     }
 }

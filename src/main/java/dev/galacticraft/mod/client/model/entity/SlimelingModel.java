@@ -5,10 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.world.entity.Entity;
 
 public class SlimelingModel<T extends Entity> extends EntityModel<T> {
@@ -18,6 +15,7 @@ public class SlimelingModel<T extends Entity> extends EntityModel<T> {
     private final ModelPart body3;
     private final ModelPart body_head;
     private final ModelPart head1;
+    private int color = -1;
 
     public SlimelingModel(ModelPart root) {
         this.main_body = root.getChild("main_body");
@@ -32,7 +30,7 @@ public class SlimelingModel<T extends Entity> extends EntityModel<T> {
         var meshdefinition = new MeshDefinition();
         var partdefinition = meshdefinition.getRoot();
 
-        var main_body = partdefinition.addOrReplaceChild("main_body", CubeListBuilder.create().texOffs(82, 0).addBox(-5.0F, -5.0F, -5.0F, 10.0F, 10.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 19.0F, 4.0F));
+        var main_body = partdefinition.addOrReplaceChild("main_body", CubeListBuilder.create().texOffs(82, 0).addBox(-5.0F, -5.0F, -5.0F, 10.0F, 10.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 19.0F, -4.0F, 0.0F, 3.1416F, 0.0F));
 
         var body1 = main_body.addOrReplaceChild("body1", CubeListBuilder.create().texOffs(48, 0).addBox(-4.0F, -2.0F, -10.0F, 9.0F, 7.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(-0.5F, 0.0F, 0.0F));
 
@@ -61,6 +59,10 @@ public class SlimelingModel<T extends Entity> extends EntityModel<T> {
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-        this.main_body.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+        this.main_body.render(poseStack, vertexConsumer, packedLight, packedOverlay, this.color);
+    }
+
+    public void setColor(int tint) {
+        this.color = tint;
     }
 }

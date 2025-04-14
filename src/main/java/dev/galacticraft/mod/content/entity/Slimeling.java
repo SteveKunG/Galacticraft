@@ -22,8 +22,6 @@
 
 package dev.galacticraft.mod.content.entity;
 
-import com.google.common.collect.ImmutableList;
-import com.mojang.authlib.GameProfile;
 import dev.galacticraft.mod.content.GCEntityTypes;
 import dev.galacticraft.mod.content.GCSounds;
 import dev.galacticraft.mod.content.block.special.slimeling_egg.SlimelingEggColor;
@@ -38,15 +36,19 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.*;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.monster.Creeper;
@@ -54,22 +56,27 @@ import net.minecraft.world.entity.monster.Ghast;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
+import com.google.common.collect.ImmutableList;
+import com.mojang.authlib.GameProfile;
 
 public class Slimeling extends TamableAnimal implements ContainerListener, HasCustomInventoryScreen {
     private static final EntityDataAccessor<Boolean> HAS_BAG = SynchedEntityData.defineId(Slimeling.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Vector3f> COLOR = SynchedEntityData.defineId(Slimeling.class, EntityDataSerializers.VECTOR3);
     private static final EntityDataAccessor<ItemStack> FAVORITE_FOOD = SynchedEntityData.defineId(Slimeling.class, EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<Integer> KILLS = SynchedEntityData.defineId(Slimeling.class, EntityDataSerializers.INT);
-    public static final String HAS_BAG_TAG = "HasBag";
-    public static final String FAVORITE_FOOD_TAG = "FavoriteFood";
-    public static final String COLOR_TAG = "Color";
-    public static final String KILL_COUNT_TAG = "KillCount";
+
+    public static final String HAS_BAG_TAG = "has_bag";
+    public static final String BAG_ITEM_TAG = "bag_item";
+    public static final String FAVORITE_FOOD_TAG = "favorite_food";
+    public static final String COLOR_TAG = "color";
+    public static final String KILL_COUNT_TAG = "kill_count";
 
     public final int MAX_AGE = 100000;
     protected SimpleContainer inventory;
@@ -77,31 +84,33 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
     public Slimeling(EntityType<? extends Slimeling> entityType, Level level) {
         super(entityType, level);
         this.createInventory();
-        //        this.tasks.addTask(1, new EntityAISwimming(this));
-        //        this.aiSit = new EntityAISitGC(this);
-        //        this.tasks.addTask(2, this.aiSit);
-        //        this.tasks.addTask(3, new EntityAILeapAtTarget(this, 0.4F));
-        //        this.tasks.addTask(4, new EntityAIAttackMelee(this, 1.0D, true));
-        //        this.tasks.addTask(5, new EntityAIFollowOwner(this, 1.0D, 10.0F, 2.0F));
-        //        this.tasks.addTask(6, new EntityAIMate(this, 1.0D));
-        //        this.tasks.addTask(7, new EntityAIWander(this, 1.0D));
-        //        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-        //        this.tasks.addTask(9, new EntityAILookIdle(this));
-        //        this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
-        //        this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
-        //        this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, true));
-        //        this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntitySludgeling.class, false, p_apply_1_ -> p_apply_1_ instanceof EntitySludgeling));
+
+        this.goalSelector.addGoal(1, new FloatGoal(this));
+        this.goalSelector.addGoal(1, new TamableAnimal.TamableAnimalPanicGoal(1.5, DamageTypeTags.PANIC_ENVIRONMENTAL_CAUSES));
+        this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
+        this.goalSelector.addGoal(4, new LeapAtTargetGoal(this, 0.4F));
+        this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.0, true));
+        this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0, 10.0F, 2.0F));
+        this.goalSelector.addGoal(7, new BreedGoal(this, 1.0));
+        this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 1.0));
+        this.goalSelector.addGoal(9, new TemptGoal(this, 1.25, stack -> stack.is(Items.SLIME_BALL), false));//TODO Tempt food
+        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
+        this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
+        this.targetSelector.addGoal(3, new HurtByTargetGoal(this).setAlertOthers());
+        //        this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, EntitySludgeling.class, false));TODO Add sludgeling
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.3F).add(Attributes.MAX_HEALTH, 8.0).add(Attributes.ATTACK_DAMAGE, 2.0);
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.2F).add(Attributes.MAX_HEALTH, 8.0).add(Attributes.ATTACK_DAMAGE, 2.0);
     }
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(HAS_BAG, false);
-        builder.define(COLOR, new Vector3f());
+        builder.define(COLOR, new Vector3f(1.0f, 1.0f, 1.0f));
         builder.define(FAVORITE_FOOD, ItemStack.EMPTY);
         builder.define(KILLS, 0);
     }
@@ -167,19 +176,22 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
         this.entityData.set(HAS_BAG, hasBag);
     }
 
-    protected int getInventorySize() {
-        return this.hasBag() ? 17 : 0;
+    public final int getInventorySize() {
+        return getInventorySize(this.getInventoryColumns());
+    }
+
+    public static int getInventorySize(int columns) {
+        return columns * 3 + 1;
     }
 
     protected void createInventory() {
         var simpleContainer = this.inventory;
         this.inventory = new SimpleContainer(this.getInventorySize());
-
         if (simpleContainer != null) {
             simpleContainer.removeListener(this);
             var i = Math.min(simpleContainer.getContainerSize(), this.inventory.getContainerSize());
 
-            for (var j = 0; j < i; ++j) {
+            for (var j = 0; j < i; j++) {
                 var itemStack = simpleContainer.getItem(j);
                 if (!itemStack.isEmpty()) {
                     this.inventory.setItem(j, itemStack.copy());
@@ -188,6 +200,7 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
         }
 
         this.inventory.addListener(this);
+        this.syncSaddleToClients();
     }
 
     public float getSlimelingSize() {
@@ -197,32 +210,73 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
+
         compound.putBoolean(HAS_BAG_TAG, this.hasBag());
-        compound.put(FAVORITE_FOOD_TAG, this.getFavoriteFood().save(this.registryAccess()));
+
+        if (!this.getFavoriteFood().isEmpty()) {
+            compound.put(FAVORITE_FOOD_TAG, this.getFavoriteFood().save(this.registryAccess()));
+        }
+
         compound.put(COLOR_TAG, this.newFloatList(this.getColor().x(), this.getColor().y(), this.getColor().z()));
         compound.putInt(KILL_COUNT_TAG, this.getKillCount());
 
         if (this.hasBag()) {
             var listTag = new ListTag();
 
-            for (var i = 1; i < this.inventory.getContainerSize(); ++i) {
+            for (var i = 1; i < this.inventory.getContainerSize(); i++) {
                 var itemStack = this.inventory.getItem(i);
                 if (!itemStack.isEmpty()) {
                     var compoundTag = new CompoundTag();
-                    compoundTag.putByte("Slot", (byte) i);
+                    compoundTag.putByte("Slot", (byte) (i - 1));
                     listTag.add(itemStack.save(this.registryAccess(), compoundTag));
                 }
             }
-
             compound.put("Items", listTag);
+        }
+
+        if (!this.inventory.getItem(0).isEmpty()) {
+            compound.put(BAG_ITEM_TAG, this.inventory.getItem(0).save(this.registryAccess()));
+        }
+    }
+
+    @Override
+    public SlotAccess getSlot(int mappedIndex) {
+        var i = mappedIndex - 400;
+        if (i == 0) {
+            return new SlotAccess() {
+                @Override
+                public ItemStack get() {
+                    return Slimeling.this.inventory.getItem(0);
+                }
+
+                @Override
+                public boolean set(ItemStack stack) {
+                    if (!stack.isEmpty() && !stack.is(GCItems.SLIMELING_INVENTORY_BAG)) {
+                        return false;
+                    } else {
+                        Slimeling.this.inventory.setItem(0, stack);
+                        return true;
+                    }
+                }
+            };
+        } else {
+            var j = mappedIndex - 500 + 1;
+            return j >= 1 && j < this.inventory.getContainerSize() ? SlotAccess.forContainer(this.inventory, j) : super.getSlot(mappedIndex);
         }
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        this.setHasBag(compound.getBoolean(HAS_BAG_TAG));
-        this.setFavoriteFood(ItemStack.parse(this.registryAccess(), compound.getCompound(FAVORITE_FOOD_TAG)).orElse(ItemStack.EMPTY));
+
+        if (compound.contains(HAS_BAG_TAG, Tag.TAG_BYTE)) {
+            this.setHasBag(compound.getBoolean(HAS_BAG_TAG));
+        }
+
+        if (compound.contains(FAVORITE_FOOD_TAG, Tag.TAG_STRING)) {
+            this.setFavoriteFood(ItemStack.parse(this.registryAccess(), compound.getCompound(FAVORITE_FOOD_TAG)).orElse(ItemStack.EMPTY));
+        }
+
         this.setKillCount(compound.getInt(KILL_COUNT_TAG));
 
         var colorListTag = compound.getList(COLOR_TAG, Tag.TAG_FLOAT);
@@ -231,45 +285,27 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
         this.createInventory();
 
         if (this.hasBag()) {
-            var listTag = compound.getList("Items", 10);
+            var listTag = compound.getList("Items", Tag.TAG_COMPOUND);
 
-            for (var i = 0; i < listTag.size(); ++i) {
+            for (var i = 0; i < listTag.size(); i++) {
                 var compoundTag = listTag.getCompound(i);
                 var j = compoundTag.getByte("Slot") & 255;
-                if (j >= 2 && j < this.inventory.getContainerSize()) {
+
+                if (j < this.inventory.getContainerSize() - 1) {
                     this.inventory.setItem(j + 1, ItemStack.parse(this.registryAccess(), compoundTag).orElse(ItemStack.EMPTY));
                 }
             }
         }
-    }
 
-    @Override
-    public SlotAccess getSlot(int slot) {
-        return slot == 499 ? new SlotAccess() {
-            @Override
-            public ItemStack get() {
-                return Slimeling.this.hasBag() ? new ItemStack(GCItems.SLIMELING_INVENTORY_BAG) : ItemStack.EMPTY;
-            }
+        if (compound.contains(BAG_ITEM_TAG, Tag.TAG_COMPOUND)) {
+            var itemStack = ItemStack.parse(this.registryAccess(), compound.getCompound(BAG_ITEM_TAG)).orElse(ItemStack.EMPTY);
 
-            @Override
-            public boolean set(ItemStack carried) {
-                if (carried.isEmpty()) {
-                    if (Slimeling.this.hasBag()) {
-                        Slimeling.this.setHasBag(false);
-                        Slimeling.this.createInventory();
-                    }
-                    return true;
-                } else if (carried.is(GCItems.SLIMELING_INVENTORY_BAG)) {
-                    if (!Slimeling.this.hasBag()) {
-                        Slimeling.this.setHasBag(true);
-                        Slimeling.this.createInventory();
-                    }
-                    return true;
-                } else {
-                    return false;
-                }
+            if (itemStack.is(GCItems.SLIMELING_INVENTORY_BAG)) {
+                this.inventory.setItem(0, itemStack);
             }
-        } : super.getSlot(slot);
+        }
+
+        this.syncSaddleToClients();
     }
 
     //    @Override
@@ -350,76 +386,108 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
     }
 
     @Override
-    public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        var itemStack = player.getItemInHand(hand);
+    public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
+        var itemStack = player.getItemInHand(interactionHand);
+        var item = itemStack.getItem();
 
-        if (this.isTame()) {
-            if (!itemStack.isEmpty()) {
-                if (ItemStack.isSameItem(itemStack, this.getFavoriteFood())) {
-                    if (this.isOwnedBy(player)) {
+        if (!this.level().isClientSide()) {
+            if (this.isTame()) {
+                if (this.isOwnedBy(player)) {
+
+                    if (player.isSecondaryUseActive()) {
+                        this.openCustomInventoryScreen(player);
+                        return InteractionResult.sidedSuccess(this.level().isClientSide);
+                    }
+
+                    if (this.isFood(itemStack)) {
                         itemStack.shrink(1);
 
                         if (this.random.nextInt(3) == 0) {
                             this.setFavoriteFood(this.getRandomFavoriteFood(this.random));
                         }
-                    } else {
-                        if (player instanceof ServerPlayer serverPlayer) {
-                            //                            GCPlayerStats stats = GCPlayerStats.get(player);
-                            //                            if (stats.getChatCooldown() == 0) {
-                            //                                player.sendMessage(new TextComponentString(GCCoreUtil.translate("gui.slimeling.chat.wrong_player")));
-                            //                                stats.setChatCooldown(100);
-                            //                            }
-                        }
+                        return InteractionResult.sidedSuccess(this.level().isClientSide());
                     }
-                } else {
-                    //                    if (this.world.isRemote) {
-                    //                        MarsModuleClient.openSlimelingGui(this, 0);
-                    //                    }
+
+                    var interactionResult = super.mobInteract(player, interactionHand);
+
+                    if (!interactionResult.consumesAction()) {
+                        this.setOrderedToSit(!this.isOrderedToSit());
+                        this.jumping = false;
+                        this.navigation.stop();
+                        this.setTarget(null);
+                        return InteractionResult.SUCCESS_NO_ITEM_USED;
+                    }
                 }
-            } else {
-                //                if (this.world.isRemote) {
-                //                    MarsModuleClient.openSlimelingGui(this, 0);
-                //                }
             }
-
-            return InteractionResult.SUCCESS;
-        } else if (!itemStack.isEmpty() && this.isFood(itemStack)) {
-            if (!player.getAbilities().instabuild) {
-                itemStack.shrink(1);
-            }
-
-            if (this.random.nextInt(3) == 0) {
-                this.tame(player);
-                this.navigation.stop();
-                this.setTarget(null);
-                this.setOrderedToSit(true);
-                this.level().broadcastEntityEvent(this, (byte) 7);
-            } else {
-                this.level().broadcastEntityEvent(this, (byte) 6);
-            }
-
-            //            if (!this.level().isClientSide()) {
-            //                if (this.rand.nextInt(3) == 0) {
-            //                    this.setTamed(true);
-            //                    this.getNavigator().clearPath();
-            //                    this.setAttackTarget(null);
-            //                    this.setSittingAI(true);
-            //                    this.setHealth(20.0F);
-            //                    this.setOwnerId(player.getUniqueID());
-            //                    this.setOwnerUsername(player.getName());
-            //                    this.playTameEffect(true);
-            //                    this.world.setEntityState(this, (byte) 7);
-            //                }
-            //                else {
-            //                    this.playTameEffect(false);
-            //                    this.world.setEntityState(this, (byte) 6);
-            //                }
-            //            }
-
-            return InteractionResult.SUCCESS;
         }
 
-        return super.mobInteract(player, hand);
+        //        if (this.isTame()) {
+        //            if (!itemStack.isEmpty()) {
+        //                if (ItemStack.isSameItem(itemStack, this.getFavoriteFood())) {
+        //                    if (this.isOwnedBy(player)) {
+        //                        itemStack.shrink(1);
+        //
+        //                        if (this.random.nextInt(3) == 0) {
+        //                            this.setFavoriteFood(this.getRandomFavoriteFood(this.random));
+        //                        }
+        //                    } else {
+        //                        if (player instanceof ServerPlayer serverPlayer) {
+        //                            //                            GCPlayerStats stats = GCPlayerStats.get(player);
+        //                            //                            if (stats.getChatCooldown() == 0) {
+        //                            //                                player.sendMessage(new TextComponentString(GCCoreUtil.translate("gui.slimeling.chat.wrong_player")));
+        //                            //                                stats.setChatCooldown(100);
+        //                            //                            }
+        //                        }
+        //                    }
+        //                } else {
+        //                    //                    if (this.world.isRemote) {
+        //                    //                        MarsModuleClient.openSlimelingGui(this, 0);
+        //                    //                    }
+        //                }
+        //            } else {
+        //                //                if (this.world.isRemote) {
+        //                //                    MarsModuleClient.openSlimelingGui(this, 0);
+        //                //                }
+        //            }
+        //
+        //            return InteractionResult.SUCCESS;
+        //        } else if (!itemStack.isEmpty() && this.isFood(itemStack)) {
+        //            if (!player.getAbilities().instabuild) {
+        //                itemStack.shrink(1);
+        //            }
+        //
+        //            if (this.random.nextInt(3) == 0) {
+        //                this.tame(player);
+        //                this.navigation.stop();
+        //                this.setTarget(null);
+        //                this.setOrderedToSit(true);
+        //                this.level().broadcastEntityEvent(this, (byte) 7);
+        //            } else {
+        //                this.level().broadcastEntityEvent(this, (byte) 6);
+        //            }
+        //
+        //            //            if (!this.level().isClientSide()) {
+        //            //                if (this.rand.nextInt(3) == 0) {
+        //            //                    this.setTamed(true);
+        //            //                    this.getNavigator().clearPath();
+        //            //                    this.setAttackTarget(null);
+        //            //                    this.setSittingAI(true);
+        //            //                    this.setHealth(20.0F);
+        //            //                    this.setOwnerId(player.getUniqueID());
+        //            //                    this.setOwnerUsername(player.getName());
+        //            //                    this.playTameEffect(true);
+        //            //                    this.world.setEntityState(this, (byte) 7);
+        //            //                }
+        //            //                else {
+        //            //                    this.playTameEffect(false);
+        //            //                    this.world.setEntityState(this, (byte) 6);
+        //            //                }
+        //            //            }
+        //
+        //            return InteractionResult.SUCCESS;
+        //        }
+
+        return super.mobInteract(player, interactionHand);
     }
 
     public String getOwnerUsername() {
@@ -435,7 +503,7 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
 
     @Override
     public boolean isFood(ItemStack itemStack) {
-        return itemStack.is(GCTags.SLIMELING_FOODS);
+        return itemStack.is(Items.SLIME_BALL);
     }
 
     @Override
@@ -512,24 +580,40 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
         }
     }
 
+    @Override
     public float getScale() {
         return this.getAge() / (float) this.MAX_AGE * 0.5F + 0.5F;
     }
 
     @Override
     public void containerChanged(Container container) {
-        //        boolean bl = this.hasBag();
-        //        this.updateContainerEquipment();
-        //        if (this.tickCount > 20 && !bl && this.hasBag()) {
-        //            this.playSound(this.getSaddleSoundEvent(), 0.5F, 1.0F);
-        //        }
+        var bl = this.hasBag();
+        this.syncSaddleToClients();
+
+        if (this.tickCount > 20 && !bl && this.hasBag()) {
+            this.playSound(SoundEvents.HORSE_SADDLE, 0.5F, 1.0F);
+        }
+    }
+
+    protected void syncSaddleToClients() {
+        if (!this.level().isClientSide()) {
+            this.setHasBag(!this.inventory.getItem(0).isEmpty());
+        }
     }
 
     @Override
     public void openCustomInventoryScreen(Player player) {
-        //        if (!this.level().isClientSide && (!this.isVehicle() || this.hasPassenger(player)) && this.isTame()) {
-        //            player.openHorseInventory(this, this.inventory);
-        //        }
+        if (!this.level().isClientSide() && this.isTame() && this.isOwnedBy(player)) {
+            player.galacticraft$openSlimelingInventory(this, this.inventory);
+        }
+    }
+
+    public int getInventoryColumns() {
+        return this.hasBag() ? 5 : 0;
+    }
+
+    public boolean hasInventoryChanged(Container container) {
+        return this.inventory != container;
     }
 
     //    public static class EntityAISitGC extends EntityAISit {
