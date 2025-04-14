@@ -159,7 +159,7 @@ public class SlimelingEgg extends BaseEntityBlock implements SimpleWaterloggedBl
             }
 
             level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(state));
-            level.scheduleTick(pos, this, 5000 + level.random.nextInt(300));
+            level.scheduleTick(pos, this, 1000 + level.random.nextInt(1000));
 
             return InteractionResult.SUCCESS;
         }
