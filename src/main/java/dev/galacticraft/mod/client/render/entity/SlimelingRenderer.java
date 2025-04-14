@@ -23,8 +23,8 @@
 package dev.galacticraft.mod.client.render.entity;
 
 import dev.galacticraft.mod.Constant;
+import dev.galacticraft.mod.client.model.entity.SlimelingModel;
 import dev.galacticraft.mod.client.render.entity.model.GCEntityModelLayer;
-import dev.galacticraft.mod.client.render.entity.model.SlimelingModel;
 import dev.galacticraft.mod.content.entity.Slimeling;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;

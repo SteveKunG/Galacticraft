@@ -164,6 +164,7 @@ public class GCCreativeModeTabs {
                 output.accept(CANVAS);
 
                 output.accept(FLUID_MANIPULATOR);
+                output.accept(SLIMELING_INVENTORY_BAG);
                 output.accept(OXYGEN_CONCENTRATOR);
                 output.accept(OXYGEN_FAN);
                 output.accept(OXYGEN_VENT);
@@ -576,6 +577,7 @@ public class GCCreativeModeTabs {
             content.addAfter(ItemStack.EMPTY, OLI_GRUB_SPAWN_EGG);
             content.addAfter(ItemStack.EMPTY, GREY_SPAWN_EGG);
             content.addAfter(ItemStack.EMPTY, ARCH_GREY_SPAWN_EGG);
+            content.addAfter(ItemStack.EMPTY, SLIMELING_SPAWN_EGG);
         });
     }
 

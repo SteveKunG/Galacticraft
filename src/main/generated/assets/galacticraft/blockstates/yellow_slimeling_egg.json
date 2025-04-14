@@ -4,7 +4,7 @@
       "model": "galacticraft:block/yellow_slimeling_egg"
     },
     "cracked=true": {
-      "model": "galacticraft:block/yellow_slimeling_egg"
+      "model": "galacticraft:block/yellow_slimeling_egg_cracked"
     }
   }
 }

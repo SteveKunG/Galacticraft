@@ -54,7 +54,7 @@ public class GCEntityModelLayer {
         EntityModelLayerRegistry.registerModelLayer(LANDER, LanderModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(PARACHEST, ParachestModel::createParachuteLayer);
         EntityModelLayerRegistry.registerModelLayer(MOON_VILLAGER, MoonVillagerModel::createBodyLayer);
-        EntityModelLayerRegistry.registerModelLayer(SLIMELING, SlimelingModel::createOuterBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(SLIMELING, SlimelingModel::createBodyLayer);
 
         EntityModelLayerRegistry.registerModelLayer(SKELETON_BOSS, EvolvedSkeletonBossModel::createBodyLayer);
 

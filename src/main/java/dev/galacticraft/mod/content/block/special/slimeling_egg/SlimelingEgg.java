@@ -24,6 +24,7 @@ package dev.galacticraft.mod.content.block.special.slimeling_egg;
 
 import java.util.stream.Stream;
 
+import org.jetbrains.annotations.Nullable;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.galacticraft.mod.content.GCEntityTypes;
@@ -52,7 +53,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
@@ -61,16 +61,16 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
 
 public class SlimelingEgg extends BaseEntityBlock implements SimpleWaterloggedBlock {
     public static final MapCodec<SlimelingEgg> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             propertiesCodec(),
             SlimelingEggColor.CODEC.fieldOf("color").forGetter(slimelingEgg -> slimelingEgg.eggColor)
     ).apply(instance, SlimelingEgg::new));
-    public static final IntegerProperty HATCH = BlockStateProperties.HATCH;
+
     public static final BooleanProperty CRACKED = BooleanProperty.create("cracked");
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+
     private static final VoxelShape SHAPE = Stream.of(
             Block.box(3.5, 0, 2, 12.5, 6.5, 3),
             Block.box(4, 8, 4, 12, 10.5, 12),
@@ -85,7 +85,7 @@ public class SlimelingEgg extends BaseEntityBlock implements SimpleWaterloggedBl
     public SlimelingEgg(Properties properties, SlimelingEggColor eggColor) {
         super(properties);
         this.eggColor = eggColor;
-        this.registerDefaultState(this.getStateDefinition().any().setValue(WATERLOGGED, false).setValue(CRACKED, false).setValue(HATCH, 0));
+        this.registerDefaultState(this.getStateDefinition().any().setValue(WATERLOGGED, false).setValue(CRACKED, false));
     }
 
     @Override
@@ -107,25 +107,20 @@ public class SlimelingEgg extends BaseEntityBlock implements SimpleWaterloggedBl
     @Override
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (state.getValue(CRACKED)) {
-            if (!this.isReadyToHatch(state)) {
-                level.playSound(null, pos, SoundEvents.SNIFFER_EGG_CRACK, SoundSource.BLOCKS, 0.7F, 0.9F + random.nextFloat() * 0.2F);
-                level.setBlock(pos, state.setValue(HATCH, this.getHatchLevel(state) + 1), 2);
-            } else {
-                level.playSound(null, pos, SoundEvents.SNIFFER_EGG_HATCH, SoundSource.BLOCKS, 0.7F, 0.9F + random.nextFloat() * 0.2F);
+            level.playSound(null, pos, SoundEvents.SNIFFER_EGG_HATCH, SoundSource.BLOCKS, 0.7F, 0.9F + random.nextFloat() * 0.2F);
 
-                if (level.getBlockEntity(pos) instanceof SlimelingEggBlockEntity slimelingEgg && slimelingEgg.ownerUUID != null) {
-                    var slimeling = GCEntityTypes.SLIMELING.create(level);
-                    var vec3 = pos.getCenter();
-                    slimeling.setOwnerUUID(slimelingEgg.ownerUUID);
-                    slimeling.setTame(true, true);
-                    slimeling.setColor(this.eggColor.color());
-                    slimeling.setHealth(20.0F);
-                    slimeling.moveTo(vec3.x(), vec3.y(), vec3.z(), Mth.wrapDegrees(random.nextFloat() * 360.0F), 0.0F);
+            if (level.getBlockEntity(pos) instanceof SlimelingEggBlockEntity slimelingEgg && slimelingEgg.getOwnerUUID() != null) {
+                var slimeling = GCEntityTypes.SLIMELING.create(level);
+                var vec3 = pos.getCenter();
+                slimeling.setOwnerUUID(slimelingEgg.getOwnerUUID());
+                slimeling.setTame(true, true);
+                slimeling.setColor(this.eggColor.color());
+                slimeling.setHealth(20.0F);
+                slimeling.moveTo(vec3.x(), vec3.y(), vec3.z(), Mth.wrapDegrees(random.nextFloat() * 360.0F), 0.0F);
 
-                    level.addFreshEntity(slimeling);
-                }
-                level.destroyBlock(pos, false);
+                level.addFreshEntity(slimeling);
             }
+            level.destroyBlock(pos, false);
         }
     }
 
@@ -152,34 +147,32 @@ public class SlimelingEgg extends BaseEntityBlock implements SimpleWaterloggedBl
     @Override
     public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (!state.getValue(CRACKED)) {
+            level.playSound(null, pos, SoundEvents.SNIFFER_EGG_CRACK, SoundSource.BLOCKS, 0.7F, 0.9F + level.random.nextFloat() * 0.2F);
             level.setBlock(pos, state.setValue(CRACKED, true), Block.UPDATE_ALL);
 
             if (level.getBlockEntity(pos) instanceof SlimelingEggBlockEntity slimelingEgg) {
-                slimelingEgg.ownerUUID = player.getUUID();
+                slimelingEgg.setOwnerUUID(player.getUUID());
             }
 
-            var boostBlock = hatchBoost(level, pos);
-            if (!level.isClientSide() && boostBlock) {
+            if (!level.isClientSide()) {
                 level.levelEvent(LevelEvent.PARTICLES_EGG_CRACK, pos, 0);
             }
 
-            var ticks = boostBlock ? 12000 : 24000;
-            var j = ticks / 3;
             level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(state));
-            level.scheduleTick(pos, this, j + level.random.nextInt(300));
+            level.scheduleTick(pos, this, 5000 + level.random.nextInt(300));
 
             return InteractionResult.SUCCESS;
         }
         return super.useWithoutItem(state, level, pos, player, hit);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack tool) {
         super.playerDestroy(level, player, pos, state, blockEntity, tool);
 
         if (tool.is(GCItems.DESH_PICKAXE)) {
-            var newStickyDeshPick = new ItemStack(GCItems.STICKY_DESH_PICKAXE);
-//            newStickyDeshPick.setTag(tool.getTag());TODO
+            var newStickyDeshPick = new ItemStack(GCItems.STICKY_DESH_PICKAXE.builtInRegistryHolder(), 1, tool.getComponentsPatch());
             player.setItemInHand(player.getUsedItemHand(), newStickyDeshPick);
             level.destroyBlock(pos, false);
         }
@@ -200,8 +193,8 @@ public class SlimelingEgg extends BaseEntityBlock implements SimpleWaterloggedBl
 
     @Override
     @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
-        var fluidState = ctx.getLevel().getFluidState(ctx.getClickedPos());
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        var fluidState = context.getLevel().getFluidState(context.getClickedPos());
         return this.defaultBlockState().setValue(WATERLOGGED, fluidState.is(FluidTags.WATER) && fluidState.getAmount() == 8);
     }
 
@@ -213,11 +206,7 @@ public class SlimelingEgg extends BaseEntityBlock implements SimpleWaterloggedBl
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(CRACKED, HATCH, WATERLOGGED);
-    }
-
-    public static boolean hatchBoost(BlockGetter level, BlockPos pos) {
-        return level.getBlockState(pos.below()).is(Blocks.SLIME_BLOCK);//TODO Hatch boost block tag?
+        builder.add(CRACKED, WATERLOGGED);
     }
 
     private void destroyEgg(Level level, BlockState state, BlockPos pos, Entity entity, int chance) {
@@ -238,13 +227,5 @@ public class SlimelingEgg extends BaseEntityBlock implements SimpleWaterloggedBl
         } else {
             return entity instanceof Player || level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING);
         }
-    }
-
-    public int getHatchLevel(BlockState state) {
-        return state.getValue(HATCH);
-    }
-
-    private boolean isReadyToHatch(BlockState state) {
-        return this.getHatchLevel(state) == 2;
     }
 }

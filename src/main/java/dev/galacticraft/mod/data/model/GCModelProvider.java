@@ -368,11 +368,13 @@ public class GCModelProvider extends FabricModelProvider {
 
     private void createSlimelingEggModel(BlockModelGenerators generator, Block block) {
         var mapping = new TextureMapping().put(GCTextureSlot.EGG, ModelLocationUtils.getModelLocation(block));
+        var crackedMapping = new TextureMapping().put(GCTextureSlot.EGG, ModelLocationUtils.getModelLocation(block, "_cracked"));
         var eggModel = GCModelTemplates.SLIMELING_EGG.create(ModelLocationUtils.getModelLocation(block), mapping, generator.modelOutput);
+        var crackedEggModel = GCModelTemplates.SLIMELING_EGG.create(ModelLocationUtils.getModelLocation(block, "_cracked"), crackedMapping, generator.modelOutput);
 
         generator.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block)
                 .with(PropertyDispatch.property(SlimelingEgg.CRACKED)
-                        .select(true, Variant.variant().with(VariantProperties.MODEL, eggModel))
+                        .select(true, Variant.variant().with(VariantProperties.MODEL, crackedEggModel))
                         .select(false, Variant.variant().with(VariantProperties.MODEL, eggModel))));
     }
 
@@ -748,6 +750,7 @@ public class GCModelProvider extends FabricModelProvider {
         generator.generateFlatItem(GCItems.OLI_GRUB_SPAWN_EGG, GCModelTemplates.SPAWN_EGG);
         generator.generateFlatItem(GCItems.GREY_SPAWN_EGG, GCModelTemplates.SPAWN_EGG);
         generator.generateFlatItem(GCItems.ARCH_GREY_SPAWN_EGG, GCModelTemplates.SPAWN_EGG);
+        generator.generateFlatItem(GCItems.SLIMELING_SPAWN_EGG, GCModelTemplates.SPAWN_EGG);
     }
 
     private void createLayeredItem(ItemModelGenerators generator, Item item, String overlay) {

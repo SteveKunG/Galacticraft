@@ -22,21 +22,22 @@
 
 package dev.galacticraft.mod.content.block.entity;
 
+import java.util.UUID;
+
+import org.jetbrains.annotations.Nullable;
 import dev.galacticraft.mod.content.GCBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.UUID;
 
 public class SlimelingEggBlockEntity extends BlockEntity {
     public static final String OWNER_TAG = "Owner";
 
     @Nullable
-    public UUID ownerUUID;
+    private UUID ownerUUID;
 
     public SlimelingEggBlockEntity(BlockPos pos, BlockState blockState) {
         super(GCBlockEntityTypes.SLIMELING_EGG, pos, blockState);
@@ -58,5 +59,24 @@ public class SlimelingEggBlockEntity extends BlockEntity {
         if (this.ownerUUID != null) {
             tag.putUUID(OWNER_TAG, this.ownerUUID);
         }
+    }
+
+    public void setOwnerUUID(@Nullable UUID ownerUUID) {
+        this.ownerUUID = ownerUUID;
+    }
+
+    @Nullable
+    public UUID getOwnerUUID() {
+        return this.ownerUUID;
+    }
+
+    @Override
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    @Override
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+        return this.saveWithoutMetadata(provider);
     }
 }
