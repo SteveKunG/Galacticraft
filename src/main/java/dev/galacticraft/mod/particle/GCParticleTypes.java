@@ -38,6 +38,8 @@ public class GCParticleTypes {
     public static final SimpleParticleType FALLING_FUEL = PARTICLES.register(Particle.FALLING_FUEL, FabricParticleTypes.simple());
     public static final SimpleParticleType DRIPPING_SULFURIC_ACID = PARTICLES.register(Particle.DRIPPING_SULFURIC_ACID, FabricParticleTypes.simple());
     public static final SimpleParticleType FALLING_SULFURIC_ACID = PARTICLES.register(Particle.FALLING_SULFURIC_ACID, FabricParticleTypes.simple());
+    public static final SimpleParticleType DRIPPING_BACTERIAL_SLUDGE = PARTICLES.register(Particle.DRIPPING_BACTERIAL_SLUDGE, FabricParticleTypes.simple());
+    public static final SimpleParticleType FALLING_BACTERIAL_SLUDGE = PARTICLES.register(Particle.FALLING_BACTERIAL_SLUDGE, FabricParticleTypes.simple());
 
     public static final SimpleParticleType CRYOGENIC_PARTICLE = PARTICLES.register(Particle.CRYOGENIC_PARTICLE, FabricParticleTypes.simple());
     public static final SimpleParticleType LANDER_FLAME_PARTICLE = PARTICLES.register(Particle.LANDER_FLAME, FabricParticleTypes.simple());

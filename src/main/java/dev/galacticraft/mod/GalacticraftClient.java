@@ -179,6 +179,8 @@ public class GalacticraftClient implements ClientModInitializer {
         ParticleFactoryRegistry.getInstance().register(GCParticleTypes.LAUNCH_FLAME_LAUNCHED, LaunchFlameParticle.LaunchedProvider::new);
         ParticleFactoryRegistry.getInstance().register(GCParticleTypes.ACID_VAPOR_PARTICLE, AcidVaporParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(GCParticleTypes.SPLASH_VENUS, SplashParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(GCParticleTypes.DRIPPING_BACTERIAL_SLUDGE, DrippingBacterialSludgeProvider::new);
+        ParticleFactoryRegistry.getInstance().register(GCParticleTypes.FALLING_BACTERIAL_SLUDGE, FallingBacterialSludgeProvider::new);
 
         FluidRenderHandlerRegistry.INSTANCE.get(Fluids.WATER); // Workaround for classloading order bug
 
@@ -194,13 +196,19 @@ public class GalacticraftClient implements ClientModInitializer {
                 Constant.Fluid.fluidId(Constant.Fluid.SULFURIC_ACID_STILL),
                 Constant.Fluid.fluidId(Constant.Fluid.SULFURIC_ACID_FLOWING)
         );
+        FluidRenderHandler bacterialSludge = new SimpleFluidRenderHandler(
+                Constant.Fluid.fluidId(Constant.Fluid.BACTERIAL_SLUDGE_STILL),
+                Constant.Fluid.fluidId(Constant.Fluid.BACTERIAL_SLUDGE_FLOWING)
+        );
 
         FluidRenderHandlerRegistry.INSTANCE.register(GCFluids.CRUDE_OIL, GCFluids.FLOWING_CRUDE_OIL, oil);
         FluidRenderHandlerRegistry.INSTANCE.register(GCFluids.FUEL, GCFluids.FLOWING_FUEL, fuel);
         FluidRenderHandlerRegistry.INSTANCE.register(GCFluids.SULFURIC_ACID, GCFluids.FLOWING_SULFURIC_ACID, sulfuricAcid);
+        FluidRenderHandlerRegistry.INSTANCE.register(GCFluids.BACTERIAL_SLUDGE, GCFluids.FLOWING_BACTERIAL_SLUDGE, bacterialSludge);
 
         BlockRenderLayerMap.INSTANCE.putFluids(RenderType.translucent(), GCFluids.FUEL, GCFluids.FLOWING_FUEL);
         BlockRenderLayerMap.INSTANCE.putFluids(RenderType.translucent(), GCFluids.SULFURIC_ACID, GCFluids.FLOWING_SULFURIC_ACID);
+        BlockRenderLayerMap.INSTANCE.putFluids(RenderType.translucent(), GCFluids.BACTERIAL_SLUDGE, GCFluids.FLOWING_BACTERIAL_SLUDGE);
 
         ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> FallenMeteorBlock.colorMultiplier(state, world, pos), GCBlocks.FALLEN_METEOR);
         ColorProviderRegistry.ITEM.register((stack, layer) -> layer != 1 ? -1 : ColorUtil.getRainbowOpaque(), GCItems.INFINITE_BATTERY, GCItems.INFINITE_OXYGEN_TANK);

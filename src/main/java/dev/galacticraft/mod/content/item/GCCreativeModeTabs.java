@@ -497,6 +497,7 @@ public class GCCreativeModeTabs {
                 output.accept(CRUDE_OIL_BUCKET);
                 output.accept(FUEL_BUCKET);
                 output.accept(SULFURIC_ACID_BUCKET);
+                output.accept(BACTERIAL_SLUDGE_BUCKET);
             })
             .build();
 

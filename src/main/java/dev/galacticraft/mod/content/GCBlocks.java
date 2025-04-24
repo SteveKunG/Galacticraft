@@ -78,6 +78,11 @@ public class GCBlocks {
                     .noCollission().pushReaction(PushReaction.DESTROY).replaceable().liquid()
                     .strength(50.0F, 50.0F).noLootTable()));
 
+    public static final LiquidBlock BACTERIAL_SLUDGE = BLOCKS.register(Constant.Block.BACTERIAL_SLUDGE,
+            new LiquidBlock(GCFluids.BACTERIAL_SLUDGE, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GREEN)
+                    .noCollission().pushReaction(PushReaction.DESTROY).replaceable().liquid()
+                    .strength(50.0F, 50.0F).noLootTable()));
+
     // DECORATION BLOCKS
     public static final DecorationSet ALUMINUM_DECORATION = BLOCKS.registerDecoration(Constant.Block.ALUMINUM_DECORATION, BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_WHITE).instrument(NoteBlockInstrument.BASEDRUM).strength(2.0F, 3.0F).requiresCorrectToolForDrops(), 2.5F, 3.0F);
     public static final DecorationSet BRONZE_DECORATION = BLOCKS.registerDecoration(Constant.Block.BRONZE_DECORATION, BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_ORANGE).instrument(NoteBlockInstrument.BASEDRUM).strength(2.0F, 3.0F).requiresCorrectToolForDrops(), 2.5F, 3.0F);

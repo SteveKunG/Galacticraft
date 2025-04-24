@@ -23,6 +23,8 @@
 package dev.galacticraft.mod.mixin;
 
 import dev.galacticraft.mod.accessor.EntityAccessor;
+import dev.galacticraft.mod.content.GCEntityTypes;
+import dev.galacticraft.mod.content.entity.Sludgeling;
 import dev.galacticraft.mod.content.entity.damage.GCDamageTypes;
 import dev.galacticraft.mod.misc.footprint.Footprint;
 import dev.galacticraft.mod.tag.GCTags;
@@ -38,12 +40,15 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
@@ -167,6 +172,23 @@ public abstract class EntityMixin implements EntityAccessor {
                 if (this.shouldPlaySulfuricAcidSound()) {
                     this.playSulfuricAcidSound();
                     this.addSulfuricAcidParticles();
+                }
+            }
+        } else if (this.updateFluidHeightAndDoFluidPushing(GCTags.BACTERIAL_SLUDGE, 0.0028d)) {
+            if (!isCreative) {
+                // Spawn sludgelings when the player or other entity is inside the bacterial sludge
+                if ((Entity)(Object)this instanceof Sludgeling) {
+                    return;
+                }
+
+                var range = 5;
+                var pos = ((Entity)(Object)this).blockPosition();
+                var entityList = this.level().getEntities(EntityTypeTest.forClass(Sludgeling.class), new AABB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range), LivingEntity::isAlive);
+
+                if (entityList.size() < 3) {
+                    var sludgeling = GCEntityTypes.SLUDGELING.create(this.level());
+                    sludgeling.moveTo(pos.getX() + this.random.nextInt(5) - 2, pos.getY(), pos.getZ() + this.random.nextInt(5) - 2);
+                    this.level().addFreshEntity(sludgeling);
                 }
             }
         }

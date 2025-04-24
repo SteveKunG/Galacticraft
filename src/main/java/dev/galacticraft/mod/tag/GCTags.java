@@ -42,6 +42,8 @@ public class GCTags {
     public static final TagKey<Fluid> SULFURIC_ACID = TagKey.create(Registries.FLUID, Constant.id("sulfuric_acid"));
     public static final TagKey<Fluid> SULFURIC_ACID_COMMON = TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath(Constant.COMMON_NAMESPACE, "sulfuric_acid"));
     public static final TagKey<Fluid> LIQUID_OXYGEN = TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath(Constant.COMMON_NAMESPACE, "oxygen"));
+    public static final TagKey<Fluid> BACTERIAL_SLUDGE = TagKey.create(Registries.FLUID, Constant.id("bacterial_sludge"));
+    public static final TagKey<Fluid> BACTERIAL_SLUDGE_COMMON = TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath(Constant.COMMON_NAMESPACE, "bacterial_sludge"));
     public static final TagKey<Fluid> OXYGEN = TagKey.create(Registries.FLUID, Constant.id("oxygen"));
     public static final TagKey<Fluid> NON_BREATHABLE = TagKey.create(Registries.FLUID, Constant.id("non_breathable"));
 

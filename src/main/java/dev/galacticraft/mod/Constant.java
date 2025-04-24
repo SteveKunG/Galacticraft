@@ -275,6 +275,7 @@ public interface Constant {
         String FUEL = "fuel";
         String CRUDE_OIL = "crude_oil";
         String SULFURIC_ACID = "sulfuric_acid";
+        String BACTERIAL_SLUDGE = "bacterial_sludge";
 
         // Machines
         String CIRCUIT_FABRICATOR = "circuit_fabricator";
@@ -354,8 +355,8 @@ public interface Constant {
         String CRUDE_OIL_STILL = "crude_oil_still";
         String FUEL_FLOWING = "fuel_flowing";
         String FUEL_STILL = "fuel_still";
-        String BACTERIAL_ACID_FLOWING = "bacterial_acid_flowing";
-        String BACTERIAL_ACID_STILL = "bacterial_acid_still";
+        String BACTERIAL_SLUDGE_FLOWING = "bacterial_sludge_flowing";
+        String BACTERIAL_SLUDGE_STILL = "bacterial_sludge_still";
         String SULFURIC_ACID_FLOWING = "sulfuric_acid_flowing";
         String SULFURIC_ACID_STILL = "sulfuric_acid_still";
         String OXYGEN_GAS = "oxygen_gas";
@@ -489,6 +490,7 @@ public interface Constant {
         String CRUDE_OIL_BUCKET = "crude_oil_bucket";
         String FUEL_BUCKET = "fuel_bucket";
         String SULFURIC_ACID_BUCKET = "sulfuric_acid_bucket";
+        String BACTERIAL_SLUDGE_BUCKET = "bacterial_sludge_bucket";
 
         //GC INVENTORY
         String PARACHUTE = "parachute";
@@ -555,6 +557,8 @@ public interface Constant {
         String FALLING_FUEL = "falling_fuel";
         String DRIPPING_SULFURIC_ACID = "dripping_sulfuric_acid";
         String FALLING_SULFURIC_ACID = "falling_sulfuric_acid";
+        String DRIPPING_BACTERIAL_SLUDGE = "dripping_bacterial_sludge";
+        String FALLING_BACTERIAL_SLUDGE = "falling_bacterial_sludge";
 
         String CRYOGENIC_PARTICLE = "cryogenic_particle";
         String LANDER_FLAME = "lander_flame_particle";
