@@ -252,6 +252,7 @@ public class GCEntityLoot extends GCEntityLootSubProvider {
                         .setRolls(ConstantValue.exactly(1))
                         .add(LootItem.lootTableItem(Items.SLIME_BALL)
                                 .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F))))));
+        this.add(GCEntityTypes.SLUDGELING, this.noDrops());
     }
 
     @Override

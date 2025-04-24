@@ -47,6 +47,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
@@ -99,7 +100,7 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this).setAlertOthers());
-        //        this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, EntitySludgeling.class, false));TODO Add sludgeling
+        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Sludgeling.class, false));
     }
 
     public static AttributeSupplier.Builder createAttributes() {

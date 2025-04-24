@@ -824,6 +824,7 @@ public interface Constant {
         String GAZER = "gazer";
         String EVOLVED_SKELETON_BOSS = "evolved_skeleton_boss";
         String SLIMELING = "slimeling";
+        String SLUDGELING = "sludgeling";
     }
 
     interface SpawnEgg {

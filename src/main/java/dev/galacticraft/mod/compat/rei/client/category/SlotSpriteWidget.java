@@ -35,6 +35,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class SlotSpriteWidget extends Slot {
     private final Point startPoint;
@@ -139,6 +140,11 @@ public class SlotSpriteWidget extends Slot {
 
     public Slot entries(Collection<? extends EntryStack<?>> stacks) {
         return this.target.entries(stacks);
+    }
+
+    @Override
+    public Slot withEntriesListener(Consumer<Slot> consumer) {
+        return this;
     }
 
     @Override

@@ -53,10 +53,13 @@ public class GCEntityTypeTagProvider extends IntrinsicHolderTagsProvider<EntityT
                 .add(GCEntityTypes.EVOLVED_WITCH)
                 .add(GCEntityTypes.EVOLVED_PILLAGER)
                 .add(GCEntityTypes.EVOLVED_EVOKER)
-                .add(GCEntityTypes.EVOLVED_VINDICATOR);
+                .add(GCEntityTypes.EVOLVED_VINDICATOR)
+                .add(GCEntityTypes.SLIMELING)
+                .add(GCEntityTypes.SLUDGELING);
         tag(EntityTypeTags.CAN_BREATHE_UNDER_WATER)
                 .addTag(GCTags.HAS_OXYGEN_SETUP)
-                .add(GCEntityTypes.SLIMELING);
+                .add(GCEntityTypes.SLIMELING)
+                .add(GCEntityTypes.SLUDGELING);
 
         tag(EntityTypeTags.IMPACT_PROJECTILES)
                 .add(GCEntityTypes.THROWABLE_METEOR_CHUNK);
@@ -79,6 +82,7 @@ public class GCEntityTypeTagProvider extends IntrinsicHolderTagsProvider<EntityT
                 .add(GCEntityTypes.EVOLVED_EVOKER)
                 .add(GCEntityTypes.EVOLVED_VINDICATOR);
         tag(EntityTypeTags.ARTHROPOD)
-                .add(GCEntityTypes.EVOLVED_SPIDER);
+                .add(GCEntityTypes.EVOLVED_SPIDER)
+                .add(GCEntityTypes.SLUDGELING);
     }
 }

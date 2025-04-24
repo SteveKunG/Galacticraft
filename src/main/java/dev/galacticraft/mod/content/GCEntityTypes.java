@@ -123,6 +123,9 @@ public class GCEntityTypes {
     public static final EntityType<Slimeling> SLIMELING = ENTITIES.register(Entity.SLIMELING, EntityType.Builder.of(Slimeling::new, MobCategory.CREATURE)
             .sized(1.0F, 1.0F)
             .build());
+    public static final EntityType<Sludgeling> SLUDGELING = ENTITIES.register(Entity.SLUDGELING, EntityType.Builder.of(Sludgeling::new, MobCategory.MONSTER)
+            .sized(0.3F, 0.2F)
+            .build());
 
     public static final EntityType<BubbleEntity> BUBBLE = ENTITIES.register(Entity.BUBBLE, EntityType.Builder.of(BubbleEntity::new, MobCategory.MISC)
             .fireImmune()
