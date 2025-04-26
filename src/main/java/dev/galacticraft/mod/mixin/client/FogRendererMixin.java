@@ -73,6 +73,10 @@ public class FogRendererMixin {
             fogRed = 0.41F;
             fogGreen = 0.78F;
             fogBlue = 0.25F;
+        } else if (player.isEyeInFluid(GCTags.BACTERIAL_SLUDGE)) {
+            fogRed = 0.02F;
+            fogGreen = 0.24F;
+            fogBlue = 0.03F;
         }
     }
 
@@ -80,11 +84,7 @@ public class FogRendererMixin {
     private static float gc$setShaderFogStart(float start, @Local FogType fogType) {
         if (fogType != FogType.NONE) {
             Player player = Minecraft.getInstance().player;
-            if (player.isEyeInFluid(GCTags.OIL)) {
-                return -8.0F;
-            } else if (player.isEyeInFluid(GCTags.FUEL)) {
-                return -8.0F;
-            } else if (player.isEyeInFluid(GCTags.SULFURIC_ACID)) {
+            if (player.isEyeInFluid(GCTags.OIL) || player.isEyeInFluid(GCTags.FUEL) || player.isEyeInFluid(GCTags.SULFURIC_ACID) || player.isEyeInFluid(GCTags.BACTERIAL_SLUDGE)) {
                 return -8.0F;
             }
         }
@@ -97,9 +97,7 @@ public class FogRendererMixin {
             Player player = Minecraft.getInstance().player;
             if (player.isEyeInFluid(GCTags.OIL)) {
                 return 8.0F;
-            } else if (player.isEyeInFluid(GCTags.FUEL)) {
-                return 12.0F;
-            } else if (player.isEyeInFluid(GCTags.SULFURIC_ACID)) {
+            } else if (player.isEyeInFluid(GCTags.FUEL) || player.isEyeInFluid(GCTags.SULFURIC_ACID) || player.isEyeInFluid(GCTags.BACTERIAL_SLUDGE)) {
                 return 12.0F;
             }
         }

@@ -89,7 +89,6 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(1, new TamableAnimal.TamableAnimalPanicGoal(1.5, DamageTypeTags.PANIC_ENVIRONMENTAL_CAUSES));
         this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
-        this.goalSelector.addGoal(4, new LeapAtTargetGoal(this, 0.4F));
         this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.0, true));
         this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0, 10.0F, 2.0F));
         this.goalSelector.addGoal(7, new BreedGoal(this, 1.0));
@@ -328,7 +327,7 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
 
     @Override
     protected SoundEvent getDeathSound() {
-        return GCSounds.ENTITY_SLIME_DEATH;
+        return GCSounds.SLIMELING_DEATH;
     }
 
     @Override
@@ -616,77 +615,4 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
     public boolean hasInventoryChanged(Container container) {
         return this.inventory != container;
     }
-
-    //    public static class EntityAISitGC extends EntityAISit {
-    //
-    //        private EntityTameable theEntity;
-    //        private boolean isSitting;
-    //
-    //        public EntityAISitGC(EntityTameable theEntity)
-    //        {
-    //            super(theEntity);
-    //            this.theEntity = theEntity;
-    //            this.setMutexBits(5);
-    //        }
-    //
-    //        @Override
-    //        public boolean shouldExecute()
-    //        {
-    //            if (!this.theEntity.isTamed()) {
-    //                return false;
-    //            }
-    //            else if (this.theEntity.isInWater()) {
-    //                return false;
-    //            }
-    //            else {
-    //                Entity e = this.theEntity.getOwner();
-    //                if (e instanceof EntityLivingBase) {
-    //                    EntityLivingBase living = (EntityLivingBase) e;
-    //                    return living == null ? true : (this.theEntity.getDistanceSq(living) < 144.0D && living.getRevengeTarget() != null ? false : this.isSitting);
-    //                }
-    //                return false;
-    //            }
-    //        }
-    //
-    //        @Override
-    //        public void startExecuting()
-    //        {
-    //            this.theEntity.getNavigator().clearPath();
-    //            this.theEntity.setSitting(true);
-    //        }
-    //
-    //        @Override
-    //        public void resetTask()
-    //        {
-    //            this.theEntity.setSitting(false);
-    //        }
-    //
-    //        @Override
-    //        public void setSitting(boolean isSitting)
-    //        {
-    //            this.isSitting = isSitting;
-    //        }
-    //    }
-    //
-    //    @Override
-    //    protected void jump()
-    //    {
-    //        this.motionY = 0.48D / WorldUtil.getGravityFactor(this);
-    //        if (this.motionY < 0.28D) {
-    //            this.motionY = 0.28D;
-    //        }
-    //
-    //        if (this.isPotionActive(MobEffects.JUMP_BOOST)) {
-    //            this.motionY += (this.getActivePotionEffect(MobEffects.JUMP_BOOST).getAmplifier() + 1) * 0.1F;
-    //        }
-    //
-    //        if (this.isSprinting()) {
-    //            float f = this.rotationYaw / Constants.RADIANS_TO_DEGREES;
-    //            this.motionX -= MathHelper.sin(f) * 0.2F;
-    //            this.motionZ += MathHelper.cos(f) * 0.2F;
-    //        }
-    //
-    //        this.isAirBorne = true;
-    //        ForgeHooks.onLivingJump(this);
-    //    }
 }

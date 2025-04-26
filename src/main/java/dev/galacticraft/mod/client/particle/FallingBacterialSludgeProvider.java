@@ -39,7 +39,7 @@ public record FallingBacterialSludgeProvider(SpriteSet spriteProvider) implement
     @Nullable
     public Particle createParticle(SimpleParticleType particleOptions, ClientLevel clientLevel, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
         var particle = new DripParticle.FallingParticle(clientLevel, x, y, z, GCFluids.BACTERIAL_SLUDGE);
-        particle.setColor(151f / 255f, 245f / 255f, 70f / 255f);
+        particle.setColor(7f / 255f, 63f / 255f, 10f / 255f);
         particle.pickSprite(this.spriteProvider);
         return particle;
     }

@@ -541,6 +541,7 @@ public class GCCreativeModeTabs {
             content.addAfter(ItemStack.EMPTY, GREY_SPAWN_EGG);
             content.addAfter(ItemStack.EMPTY, ARCH_GREY_SPAWN_EGG);
             content.addAfter(ItemStack.EMPTY, SLIMELING_SPAWN_EGG);
+            content.addAfter(ItemStack.EMPTY, SLUDGELING_SPAWN_EGG);
         });
     }
 

@@ -753,6 +753,7 @@ public class GCModelProvider extends FabricModelProvider {
         generator.generateFlatItem(GCItems.GREY_SPAWN_EGG, GCModelTemplates.SPAWN_EGG);
         generator.generateFlatItem(GCItems.ARCH_GREY_SPAWN_EGG, GCModelTemplates.SPAWN_EGG);
         generator.generateFlatItem(GCItems.SLIMELING_SPAWN_EGG, GCModelTemplates.SPAWN_EGG);
+        generator.generateFlatItem(GCItems.SLUDGELING_SPAWN_EGG, GCModelTemplates.SPAWN_EGG);
     }
 
     private void createLayeredItem(ItemModelGenerators generator, Item item, String overlay) {

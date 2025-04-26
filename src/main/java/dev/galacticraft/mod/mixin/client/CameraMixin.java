@@ -88,6 +88,6 @@ public abstract class CameraMixin {
 
     @ModifyExpressionValue(method = "getFluidInCamera", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/material/FluidState;is(Lnet/minecraft/tags/TagKey;)Z", ordinal = 0))
     private boolean gc$getFluidInCamera(boolean original, @Local FluidState fluidState) {
-        return original || fluidState.is(GCTags.OIL) || fluidState.is(GCTags.FUEL) || fluidState.is(GCTags.SULFURIC_ACID);
+        return original || fluidState.is(GCTags.OIL) || fluidState.is(GCTags.FUEL) || fluidState.is(GCTags.SULFURIC_ACID) || fluidState.is(GCTags.BACTERIAL_SLUDGE);
     }
 }
