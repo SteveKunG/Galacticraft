@@ -1,7 +1,5 @@
 {
   "values": [
-    "#galacticraft:has_oxygen_setup",
-    "galacticraft:slimeling",
-    "galacticraft:sludgeling"
+    "#galacticraft:has_oxygen_setup"
   ]
 }

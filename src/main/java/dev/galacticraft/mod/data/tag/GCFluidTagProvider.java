@@ -66,6 +66,7 @@ public class GCFluidTagProvider extends FabricTagProvider.FluidTagProvider {
                 .addTag(GCFluidTags.OIL)
                 .addTag(GCFluidTags.FUEL)
                 .addTag(GCFluidTags.SULFURIC_ACID)
+                .addTag(GCFluidTags.BACTERIAL_SLUDGE)
                 .addOptionalTag(FluidTags.WATER);
 
         this.getOrCreateTagBuilder(GCFluidTags.BACTERIAL_SLUDGE)
