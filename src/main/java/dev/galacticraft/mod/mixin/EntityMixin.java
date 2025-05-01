@@ -174,7 +174,7 @@ public abstract class EntityMixin implements EntityAccessor {
                     this.addSulfuricAcidParticles();
                 }
             }
-        } else if (this.updateFluidHeightAndDoFluidPushing(GCTags.BACTERIAL_SLUDGE, 0.0028d)) {
+        } else if (this.updateFluidHeightAndDoFluidPushing(GCFluidTags.BACTERIAL_SLUDGE, 0.0028d)) {
             if (!isCreative) {
                 // Spawn sludgelings when the player or other entity is inside the bacterial sludge
                 if ((Entity)(Object)this instanceof Sludgeling) {

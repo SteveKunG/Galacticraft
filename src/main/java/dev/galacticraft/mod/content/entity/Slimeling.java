@@ -26,7 +26,7 @@ import dev.galacticraft.mod.content.GCEntityTypes;
 import dev.galacticraft.mod.content.GCSounds;
 import dev.galacticraft.mod.content.block.special.slimeling_egg.SlimelingEggColor;
 import dev.galacticraft.mod.content.item.GCItems;
-import dev.galacticraft.mod.tag.GCTags;
+import dev.galacticraft.mod.tag.GCItemTags;
 import net.minecraft.Util;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -165,7 +165,7 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
     }
 
     public ItemStack getRandomFavoriteFood(RandomSource randomSource) {
-        return new ItemStack(Util.getRandom(ImmutableList.copyOf(BuiltInRegistries.ITEM.getTagOrEmpty(GCTags.SLIMELING_FAVORITE_FOODS)), randomSource).value());
+        return new ItemStack(Util.getRandom(ImmutableList.copyOf(BuiltInRegistries.ITEM.getTagOrEmpty(GCItemTags.SLIMELING_FAVORITE_FOODS)), randomSource).value());
     }
 
     public boolean hasBag() {
