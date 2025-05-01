@@ -26,7 +26,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import dev.galacticraft.mod.Constant;
 import dev.galacticraft.mod.client.render.dimension.OverworldRenderer;
 import dev.galacticraft.mod.content.entity.orbital.RocketEntity;
-import dev.galacticraft.mod.tag.GCTags;
+import dev.galacticraft.mod.tag.GCFluidTags;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -61,15 +61,15 @@ public class FogRendererMixin {
     @Inject(method = "setupColor", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/FogRenderer;getPriorityFogFunction(Lnet/minecraft/world/entity/Entity;F)Lnet/minecraft/client/renderer/FogRenderer$MobEffectFogFunction;"))
     private static void gc$setupFluidFog(Camera camera, float partialTicks, ClientLevel clientLevel, int renderDistanceChunks, float bossColorModifier, CallbackInfo ci) {
         Player player = Minecraft.getInstance().player;
-        if (player.isEyeInFluid(GCTags.OIL)) {
+        if (player.isEyeInFluid(GCFluidTags.OIL)) {
             fogRed = 0.0F;
             fogGreen = 0.0F;
             fogBlue = 0.0F;
-        } else if (player.isEyeInFluid(GCTags.FUEL)) {
+        } else if (player.isEyeInFluid(GCFluidTags.FUEL)) {
             fogRed = 0.72F;
             fogGreen = 0.58F;
             fogBlue = 0.18F;
-        } else if (player.isEyeInFluid(GCTags.SULFURIC_ACID)) {
+        } else if (player.isEyeInFluid(GCFluidTags.SULFURIC_ACID)) {
             fogRed = 0.41F;
             fogGreen = 0.78F;
             fogBlue = 0.25F;
@@ -84,7 +84,7 @@ public class FogRendererMixin {
     private static float gc$setShaderFogStart(float start, @Local FogType fogType) {
         if (fogType != FogType.NONE) {
             Player player = Minecraft.getInstance().player;
-            if (player.isEyeInFluid(GCTags.OIL) || player.isEyeInFluid(GCTags.FUEL) || player.isEyeInFluid(GCTags.SULFURIC_ACID) || player.isEyeInFluid(GCTags.BACTERIAL_SLUDGE)) {
+            if (player.isEyeInFluid(GCFluidTags.OIL) || player.isEyeInFluid(GCFluidTags.FUEL) || player.isEyeInFluid(GCFluidTags.SULFURIC_ACID) || player.isEyeInFluid(GCFluidTags.BACTERIAL_SLUDGE)) {
                 return -8.0F;
             }
         }
@@ -95,9 +95,9 @@ public class FogRendererMixin {
     private static float gc$setShaderFogEnd(float end, @Local FogType fogType) {
         if (fogType != FogType.NONE) {
             Player player = Minecraft.getInstance().player;
-            if (player.isEyeInFluid(GCTags.OIL)) {
+            if (player.isEyeInFluid(GCFluidTags.OIL)) {
                 return 8.0F;
-            } else if (player.isEyeInFluid(GCTags.FUEL) || player.isEyeInFluid(GCTags.SULFURIC_ACID) || player.isEyeInFluid(GCTags.BACTERIAL_SLUDGE)) {
+            } else if (player.isEyeInFluid(GCFluidTags.FUEL) || player.isEyeInFluid(GCFluidTags.SULFURIC_ACID) || player.isEyeInFluid(GCFluidTags.BACTERIAL_SLUDGE)) {
                 return 12.0F;
             }
         }
