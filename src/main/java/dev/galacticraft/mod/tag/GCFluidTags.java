@@ -35,6 +35,8 @@ public class GCFluidTags {
     public static final TagKey<Fluid> FUEL_COMMON = commonTag("fuel");
     public static final TagKey<Fluid> SULFURIC_ACID = galacticraftTag("sulfuric_acid");
     public static final TagKey<Fluid> SULFURIC_ACID_COMMON = commonTag("sulfuric_acid");
+    public static final TagKey<Fluid> BACTERIAL_SLUDGE = galacticraftTag("bacterial_sludge");
+    public static final TagKey<Fluid> BACTERIAL_SLUDGE_COMMON = commonTag("bacterial_sludge");
     public static final TagKey<Fluid> LIQUID_OXYGEN = commonTag("oxygen");
     public static final TagKey<Fluid> OXYGEN = galacticraftTag("oxygen");
     public static final TagKey<Fluid> NON_BREATHABLE = galacticraftTag("non_breathable");

@@ -132,6 +132,9 @@ public class GCItemTags {
     public static final TagKey<Item> ROCKET_STORAGE_UPGRADE_ITEMS = galacticraftTag("rocket_storage_upgrade_items");
     public static final TagKey<Item> EVOLVED_CREEPER_DROP_MUSIC_DISCS = galacticraftTag("evolved_creeper_drop_music_discs");
 
+    public static final TagKey<Item> SLIMELING_FAVORITE_FOODS = galacticraftTag("slimeling_favorite_foods");
+    public static final TagKey<Item> SLIMELING_FOODS = galacticraftTag("slimeling_foods");
+
     public static final TagKey<Item> SLABS = galacticraftTag("slabs");
     public static final TagKey<Item> STAIRS = galacticraftTag("stairs");
     public static final TagKey<Item> WALLS = galacticraftTag("walls");

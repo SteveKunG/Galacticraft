@@ -73,7 +73,7 @@ public class FogRendererMixin {
             fogRed = 0.41F;
             fogGreen = 0.78F;
             fogBlue = 0.25F;
-        } else if (player.isEyeInFluid(GCTags.BACTERIAL_SLUDGE)) {
+        } else if (player.isEyeInFluid(GCFluidTags.BACTERIAL_SLUDGE)) {
             fogRed = 0.02F;
             fogGreen = 0.24F;
             fogBlue = 0.03F;

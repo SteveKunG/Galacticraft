@@ -58,7 +58,7 @@ public class ScreenEffectRendererMixin {
             gc$renderFluidOverlay(minecraft, poseStack, FUEL_LOCATION);
         } else if (minecraft.player.isEyeInFluid(GCFluidTags.SULFURIC_ACID)) {
             gc$renderFluidOverlay(minecraft, poseStack, ACID_LOCATION);
-        } else if (minecraft.player.isEyeInFluid(GCTags.BACTERIAL_SLUDGE)) {
+        } else if (minecraft.player.isEyeInFluid(GCFluidTags.BACTERIAL_SLUDGE)) {
             gc$renderFluidOverlay(minecraft, poseStack, BACTERIAL_SLUDGE_LOCATION);
         }
     }
