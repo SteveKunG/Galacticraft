@@ -25,13 +25,16 @@ package dev.galacticraft.mod.network.s2c;
 import org.jetbrains.annotations.NotNull;
 import dev.galacticraft.impl.network.s2c.S2CPayload;
 import dev.galacticraft.mod.Constant;
-import dev.galacticraft.mod.network.runnable.OpenSlimelingInventoryScreen;
+import dev.galacticraft.mod.client.gui.screen.ingame.SlimelingInventoryScreen;
+import dev.galacticraft.mod.content.entity.Slimeling;
+import dev.galacticraft.mod.screen.SlimelingInventoryMenu;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.SimpleContainer;
 
 public record OpenSlimelingInventoryScreenPayload(int containerId, int inventoryColumns, int entityId) implements S2CPayload {
     public static final StreamCodec<RegistryFriendlyByteBuf, OpenSlimelingInventoryScreenPayload> STREAM_CODEC = StreamCodec.composite(
@@ -52,8 +55,21 @@ public record OpenSlimelingInventoryScreenPayload(int containerId, int inventory
         return TYPE;
     }
 
+    @SuppressWarnings("Convert2Lambda")
     @Override
     public Runnable handle(@NotNull ClientPlayNetworking.Context context) {
-        return new OpenSlimelingInventoryScreen(context, this);
+        return new Runnable() {
+            @Override
+            public void run() {
+                if (context.client().level.getEntity(OpenSlimelingInventoryScreenPayload.this.entityId()) instanceof Slimeling slimeling) {
+                    var localPlayer = context.client().player;
+                    var columns = OpenSlimelingInventoryScreenPayload.this.inventoryColumns();
+                    var simpleContainer = new SimpleContainer(Slimeling.getInventorySize(columns));
+                    var inventoryMenu = new SlimelingInventoryMenu(OpenSlimelingInventoryScreenPayload.this.containerId(), localPlayer.getInventory(), simpleContainer, slimeling, columns);
+                    localPlayer.containerMenu = inventoryMenu;
+                    context.client().setScreen(new SlimelingInventoryScreen(inventoryMenu, localPlayer.getInventory(), slimeling, columns));
+                }
+            }
+        };
     }
 }

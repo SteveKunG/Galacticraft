@@ -24,6 +24,7 @@ package dev.galacticraft.mod.screen;
 
 import dev.galacticraft.mod.content.entity.Slimeling;
 import dev.galacticraft.mod.content.item.GCItems;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -41,10 +42,11 @@ public class SlimelingInventoryMenu extends AbstractContainerMenu {
         this.slimeling = slimeling;
         container.startOpen(inventory.player);
 
+        // Hat Slot
         this.addSlot(new Slot(container, 0, 8, 18) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return stack.is(GCItems.SLIMELING_INVENTORY_BAG) && !this.hasItem() && !slimeling.hasBag();
+                return stack.is(ItemTags.WOOL_CARPETS) && !this.hasItem();
             }
         });
 

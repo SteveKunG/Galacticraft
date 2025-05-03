@@ -22,6 +22,10 @@
 
 package dev.galacticraft.mod.content.entity;
 
+import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
+import com.google.common.collect.ImmutableList;
+import com.mojang.authlib.GameProfile;
 import dev.galacticraft.mod.content.GCEntityTypes;
 import dev.galacticraft.mod.content.GCSounds;
 import dev.galacticraft.mod.content.block.special.slimeling_egg.SlimelingEggColor;
@@ -39,6 +43,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.*;
 import net.minecraft.world.damagesource.DamageSource;
@@ -62,10 +67,6 @@ import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
-import com.google.common.collect.ImmutableList;
-import com.mojang.authlib.GameProfile;
 
 public class Slimeling extends TamableAnimal implements ContainerListener, HasCustomInventoryScreen {
     private static final EntityDataAccessor<Boolean> HAS_BAG = SynchedEntityData.defineId(Slimeling.class, EntityDataSerializers.BOOLEAN);
@@ -74,7 +75,7 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
     private static final EntityDataAccessor<Integer> KILLS = SynchedEntityData.defineId(Slimeling.class, EntityDataSerializers.INT);
 
     public static final String HAS_BAG_TAG = "has_bag";
-    public static final String BAG_ITEM_TAG = "bag_item";
+    public static final String HAT_ITEM_TAG = "hat_item";
     public static final String FAVORITE_FOOD_TAG = "favorite_food";
     public static final String COLOR_TAG = "color";
     public static final String KILL_COUNT_TAG = "kill_count";
@@ -187,12 +188,14 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
     protected void createInventory() {
         var simpleContainer = this.inventory;
         this.inventory = new SimpleContainer(this.getInventorySize());
+
         if (simpleContainer != null) {
             simpleContainer.removeListener(this);
             var i = Math.min(simpleContainer.getContainerSize(), this.inventory.getContainerSize());
 
             for (var j = 0; j < i; j++) {
                 var itemStack = simpleContainer.getItem(j);
+
                 if (!itemStack.isEmpty()) {
                     this.inventory.setItem(j, itemStack.copy());
                 }
@@ -225,6 +228,7 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
 
             for (var i = 1; i < this.inventory.getContainerSize(); i++) {
                 var itemStack = this.inventory.getItem(i);
+
                 if (!itemStack.isEmpty()) {
                     var compoundTag = new CompoundTag();
                     compoundTag.putByte("Slot", (byte) (i - 1));
@@ -235,27 +239,37 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
         }
 
         if (!this.inventory.getItem(0).isEmpty()) {
-            compound.put(BAG_ITEM_TAG, this.inventory.getItem(0).save(this.registryAccess()));
+            compound.put(HAT_ITEM_TAG, this.inventory.getItem(0).save(this.registryAccess()));
         }
     }
 
     @Override
     public SlotAccess getSlot(int mappedIndex) {
-        var i = mappedIndex - 400;
-        if (i == 0) {
+        if (mappedIndex == 499) {
             return new SlotAccess() {
                 @Override
                 public ItemStack get() {
-                    return Slimeling.this.inventory.getItem(0);
+                    return Slimeling.this.hasBag() ? new ItemStack(GCItems.SLIMELING_INVENTORY_BAG) : ItemStack.EMPTY;
                 }
 
                 @Override
                 public boolean set(ItemStack stack) {
-                    if (!stack.isEmpty() && !stack.is(GCItems.SLIMELING_INVENTORY_BAG)) {
-                        return false;
-                    } else {
-                        Slimeling.this.inventory.setItem(0, stack);
+                    if (stack.isEmpty()) {
+                        if (Slimeling.this.hasBag()) {
+                            Slimeling.this.setHasBag(false);
+                            Slimeling.this.createInventory();
+                        }
+
                         return true;
+                    } else if (stack.is(GCItems.SLIMELING_INVENTORY_BAG)) {
+                        if (!Slimeling.this.hasBag()) {
+                            Slimeling.this.setHasBag(true);
+                            Slimeling.this.createInventory();
+                        }
+
+                        return true;
+                    } else {
+                        return false;
                     }
                 }
             };
@@ -297,10 +311,10 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
             }
         }
 
-        if (compound.contains(BAG_ITEM_TAG, Tag.TAG_COMPOUND)) {
-            var itemStack = ItemStack.parse(this.registryAccess(), compound.getCompound(BAG_ITEM_TAG)).orElse(ItemStack.EMPTY);
+        if (compound.contains(HAT_ITEM_TAG, Tag.TAG_COMPOUND)) {
+            var itemStack = ItemStack.parse(this.registryAccess(), compound.getCompound(HAT_ITEM_TAG)).orElse(ItemStack.EMPTY);
 
-            if (itemStack.is(GCItems.SLIMELING_INVENTORY_BAG)) {
+            if (itemStack.is(ItemTags.WOOL_CARPETS)) {
                 this.inventory.setItem(0, itemStack);
             }
         }
@@ -390,33 +404,39 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
         var itemStack = player.getItemInHand(interactionHand);
         var item = itemStack.getItem();
 
-        if (!this.level().isClientSide()) {
-            if (this.isTame()) {
-                if (this.isOwnedBy(player)) {
+        if (this.isTame()) {
+            if (this.isOwnedBy(player)) {
 
-                    if (player.isSecondaryUseActive()) {
-                        this.openCustomInventoryScreen(player);
-                        return InteractionResult.sidedSuccess(this.level().isClientSide);
+                if (player.isSecondaryUseActive()) {
+                    this.openCustomInventoryScreen(player);
+                    return InteractionResult.sidedSuccess(this.level().isClientSide());
+                }
+
+                if (itemStack.is(GCItems.SLIMELING_INVENTORY_BAG) && !this.hasBag()) {
+                    itemStack.consume(1, player);
+                    this.setHasBag(true);
+                    this.playSound(SoundEvents.HORSE_SADDLE, 0.5F, 1.0F);
+                    this.createInventory();
+                    return InteractionResult.sidedSuccess(this.level().isClientSide());
+                }
+
+                if (this.isFood(itemStack)) {
+                    itemStack.shrink(1);
+
+                    if (this.random.nextInt(3) == 0) {
+                        this.setFavoriteFood(this.getRandomFavoriteFood(this.random));
                     }
+                    return InteractionResult.sidedSuccess(this.level().isClientSide());
+                }
 
-                    if (this.isFood(itemStack)) {
-                        itemStack.shrink(1);
+                var interactionResult = super.mobInteract(player, interactionHand);
 
-                        if (this.random.nextInt(3) == 0) {
-                            this.setFavoriteFood(this.getRandomFavoriteFood(this.random));
-                        }
-                        return InteractionResult.sidedSuccess(this.level().isClientSide());
-                    }
-
-                    var interactionResult = super.mobInteract(player, interactionHand);
-
-                    if (!interactionResult.consumesAction()) {
-                        this.setOrderedToSit(!this.isOrderedToSit());
-                        this.jumping = false;
-                        this.navigation.stop();
-                        this.setTarget(null);
-                        return InteractionResult.SUCCESS_NO_ITEM_USED;
-                    }
+                if (!interactionResult.consumesAction()) {
+                    this.setOrderedToSit(!this.isOrderedToSit());
+                    this.jumping = false;
+                    this.navigation.stop();
+                    this.setTarget(null);
+                    return InteractionResult.SUCCESS_NO_ITEM_USED;
                 }
             }
         }
@@ -597,7 +617,7 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
 
     protected void syncSaddleToClients() {
         if (!this.level().isClientSide()) {
-            this.setHasBag(!this.inventory.getItem(0).isEmpty());
+            //            this.setHasBag(!this.inventory.getItem(0).isEmpty());
         }
     }
 
