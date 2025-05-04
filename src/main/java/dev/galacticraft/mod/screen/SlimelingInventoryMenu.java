@@ -42,11 +42,11 @@ public class SlimelingInventoryMenu extends AbstractContainerMenu {
         this.slimeling = slimeling;
         container.startOpen(inventory.player);
 
-        // Hat Slot
+        // Bag Slot
         this.addSlot(new Slot(container, 0, 8, 18) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return stack.is(ItemTags.WOOL_CARPETS) && !this.hasItem();
+                return stack.is(GCItems.SLIMELING_INVENTORY_BAG) && !this.hasItem();
             }
         });
 

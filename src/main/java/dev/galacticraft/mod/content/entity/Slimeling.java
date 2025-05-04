@@ -43,7 +43,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.*;
 import net.minecraft.world.damagesource.DamageSource;
@@ -75,7 +74,7 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
     private static final EntityDataAccessor<Integer> KILLS = SynchedEntityData.defineId(Slimeling.class, EntityDataSerializers.INT);
 
     public static final String HAS_BAG_TAG = "has_bag";
-    public static final String HAT_ITEM_TAG = "hat_item";
+    public static final String BAG_ITEM_TAG = "bag_item";
     public static final String FAVORITE_FOOD_TAG = "favorite_food";
     public static final String COLOR_TAG = "color";
     public static final String KILL_COUNT_TAG = "kill_count";
@@ -239,29 +238,34 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
         }
 
         if (!this.inventory.getItem(0).isEmpty()) {
-            compound.put(HAT_ITEM_TAG, this.inventory.getItem(0).save(this.registryAccess()));
+            compound.put(BAG_ITEM_TAG, this.inventory.getItem(0).save(this.registryAccess()));
         }
     }
 
     @Override
     public SlotAccess getSlot(int mappedIndex) {
-        if (mappedIndex == 499) {
+        var i = mappedIndex - 400;
+        if (i == 0) {
             return new SlotAccess() {
                 @Override
                 public ItemStack get() {
-                    return Slimeling.this.hasBag() ? new ItemStack(GCItems.SLIMELING_INVENTORY_BAG) : ItemStack.EMPTY;
+                    return Slimeling.this.inventory.getItem(0);
                 }
 
                 @Override
                 public boolean set(ItemStack stack) {
+
+                    System.out.println(Slimeling.this.hasBag());
+
                     if (stack.isEmpty()) {
                         if (Slimeling.this.hasBag()) {
                             Slimeling.this.setHasBag(false);
                             Slimeling.this.createInventory();
                         }
-
                         return true;
                     } else if (stack.is(GCItems.SLIMELING_INVENTORY_BAG)) {
+                        Slimeling.this.inventory.setItem(0, stack);
+
                         if (!Slimeling.this.hasBag()) {
                             Slimeling.this.setHasBag(true);
                             Slimeling.this.createInventory();
@@ -311,10 +315,10 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
             }
         }
 
-        if (compound.contains(HAT_ITEM_TAG, Tag.TAG_COMPOUND)) {
-            var itemStack = ItemStack.parse(this.registryAccess(), compound.getCompound(HAT_ITEM_TAG)).orElse(ItemStack.EMPTY);
+        if (compound.contains(BAG_ITEM_TAG, Tag.TAG_COMPOUND)) {
+            var itemStack = ItemStack.parse(this.registryAccess(), compound.getCompound(BAG_ITEM_TAG)).orElse(ItemStack.EMPTY);
 
-            if (itemStack.is(ItemTags.WOOL_CARPETS)) {
+            if (itemStack.is(GCItems.SLIMELING_INVENTORY_BAG)) {
                 this.inventory.setItem(0, itemStack);
             }
         }
@@ -403,6 +407,9 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
         var itemStack = player.getItemInHand(interactionHand);
         var item = itemStack.getItem();
+
+        System.out.println("hasbag "  + this.hasBag());
+        System.out.println("inventory "  + this.inventory);
 
         if (this.isTame()) {
             if (this.isOwnedBy(player)) {
@@ -617,7 +624,7 @@ public class Slimeling extends TamableAnimal implements ContainerListener, HasCu
 
     protected void syncSaddleToClients() {
         if (!this.level().isClientSide()) {
-            //            this.setHasBag(!this.inventory.getItem(0).isEmpty());
+            this.setHasBag(!this.inventory.getItem(0).isEmpty());
         }
     }
 
