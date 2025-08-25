@@ -26,37 +26,54 @@ import dev.galacticraft.api.entity.IgnoreShift;
 import dev.galacticraft.api.rocket.RocketData;
 import dev.galacticraft.mod.accessor.ServerPlayerAccessor;
 import dev.galacticraft.mod.content.block.special.CryogenicChamberBlock;
+import dev.galacticraft.mod.content.entity.Slimeling;
+import dev.galacticraft.mod.network.s2c.OpenSlimelingInventoryScreenPayload;
+import dev.galacticraft.mod.screen.SlimelingInventoryMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 @Mixin(ServerPlayer.class)
-public abstract class ServerPlayerMixin extends LivingEntityMixin implements ServerPlayerAccessor {
+public abstract class ServerPlayerMixin extends Player implements ServerPlayerAccessor {
 
     private @Unique
     @Nullable RocketData rocketData = null;
     private @Unique boolean celestialActive = false;
     private @Unique boolean isRideTick = false;
 
+    @Shadow
+    int containerCounter;
+
+    @Shadow
+    void nextContainerCounter() {
+    }
+
+    @Shadow
+    void initMenu(AbstractContainerMenu abstractContainerMenu) {
+    }
+
     @Override
     public boolean galacticraft$isCelestialScreenActive() {
         return this.celestialActive;
     }
 
-    public ServerPlayerMixin(EntityType<?> entityType, Level level) {
-        super(entityType, level);
+    ServerPlayerMixin() {
+        super(null, null, 0, null);
     }
 
     @Override
@@ -74,6 +91,19 @@ public abstract class ServerPlayerMixin extends LivingEntityMixin implements Ser
     public void galacticraft$openCelestialScreen(@Nullable RocketData data) {
         this.celestialActive = true;
         this.rocketData = data;
+    }
+
+    @Override
+    public void galacticraft$openSlimelingInventory(Slimeling slimeling, Container container) {
+        if (this.containerMenu != this.inventoryMenu) {
+            this.closeContainer();
+        }
+
+        this.nextContainerCounter();
+        var column = slimeling.getInventoryColumns();
+        ServerPlayNetworking.send(ServerPlayer.class.cast(this), new OpenSlimelingInventoryScreenPayload(this.containerCounter, column, slimeling.getId()));
+        this.containerMenu = new SlimelingInventoryMenu(this.containerCounter, this.getInventory(), container, slimeling, column);
+        this.initMenu(this.containerMenu);
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("RETURN"))

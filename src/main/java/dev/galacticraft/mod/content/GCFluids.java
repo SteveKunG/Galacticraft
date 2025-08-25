@@ -39,6 +39,8 @@ public class GCFluids {
     public static final FlowingFluid FLOWING_FUEL = new FuelFluid.Flowing();
     public static final FlowingFluid SULFURIC_ACID = new SulfuricAcidFluid.Still();
     public static final FlowingFluid FLOWING_SULFURIC_ACID = new SulfuricAcidFluid.Flowing();
+    public static final FlowingFluid BACTERIAL_SLUDGE = new BacterialSludgeFluid.Still();
+    public static final FlowingFluid FLOWING_BACTERIAL_SLUDGE = new BacterialSludgeFluid.Flowing();
 
     public static final Fluid LIQUID_OXYGEN = new OxygenFluid();
 
@@ -50,6 +52,8 @@ public class GCFluids {
         register(Constant.Fluid.SULFURIC_ACID_STILL, SULFURIC_ACID);
         register(Constant.Fluid.SULFURIC_ACID_FLOWING, FLOWING_SULFURIC_ACID);
         register(Constant.Fluid.LIQUID_OXYGEN, LIQUID_OXYGEN);
+        register(Constant.Fluid.BACTERIAL_SLUDGE_STILL, BACTERIAL_SLUDGE);
+        register(Constant.Fluid.BACTERIAL_SLUDGE_FLOWING, FLOWING_BACTERIAL_SLUDGE);
     }
 
     public static void registerFluidVariantAttributes() {
@@ -76,6 +80,12 @@ public class GCFluids {
                         .setStyle(Constant.Text.AQUA_STYLE),
                 500,
                 true
+        ));
+        FluidVariantAttributes.register(BACTERIAL_SLUDGE, new GCFluidAttribute(
+                Component.translatable(GCBlocks.BACTERIAL_SLUDGE.getDescriptionId())
+                        .setStyle(Constant.Text.GREEN_STYLE),
+                1500,
+                false
         ));
     }
 

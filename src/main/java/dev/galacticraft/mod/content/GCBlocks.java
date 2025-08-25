@@ -37,6 +37,8 @@ import dev.galacticraft.mod.content.block.special.aluminumwire.tier2.HeavySealab
 import dev.galacticraft.mod.content.block.special.fluidpipe.GlassFluidPipeBlock;
 import dev.galacticraft.mod.content.block.special.launchpad.FuelPadBlock;
 import dev.galacticraft.mod.content.block.special.launchpad.LaunchPadBlock;
+import dev.galacticraft.mod.content.block.special.slimeling_egg.SlimelingEgg;
+import dev.galacticraft.mod.content.block.special.slimeling_egg.SlimelingEggColor;
 import dev.galacticraft.mod.content.block.special.walkway.GlassFluidPipeWalkwayBlock;
 import dev.galacticraft.mod.content.block.special.walkway.WalkwayBlock;
 import dev.galacticraft.mod.content.block.special.walkway.WireWalkwayBlock;
@@ -77,6 +79,11 @@ public class GCBlocks {
 
     public static final LiquidBlock SULFURIC_ACID = BLOCKS.register(Constant.Block.SULFURIC_ACID,
             new LiquidBlock(GCFluids.SULFURIC_ACID, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_GREEN)
+                    .noCollission().pushReaction(PushReaction.DESTROY).replaceable().liquid()
+                    .strength(50.0F, 50.0F).noLootTable()));
+
+    public static final LiquidBlock BACTERIAL_SLUDGE = BLOCKS.register(Constant.Block.BACTERIAL_SLUDGE,
+            new LiquidBlock(GCFluids.BACTERIAL_SLUDGE, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GREEN)
                     .noCollission().pushReaction(PushReaction.DESTROY).replaceable().liquid()
                     .strength(50.0F, 50.0F).noLootTable()));
 
@@ -364,6 +371,10 @@ public class GCBlocks {
     public static final AirlockBlock AIR_LOCK_FRAME = BLOCKS.registerWithItem(Constant.Block.AIR_LOCK_FRAME, new AirlockBlock(false, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).mapColor(MapColor.COLOR_GRAY)));
     public static final AirlockBlock AIR_LOCK_CONTROLLER = BLOCKS.registerWithItem(Constant.Block.AIR_LOCK_CONTROLLER, new AirlockBlock(true, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).mapColor(MapColor.COLOR_GRAY)));
     public static final Block AIR_LOCK_SEAL = BLOCKS.register(Constant.Block.AIR_LOCK_SEAL, new AirlockSealBlock(BlockBehaviour.Properties.ofFullCopy(AIR_LOCK_FRAME).strength(-1.0f, 3600000.0f).noLootTable().isValidSpawn(GCBlocks::never)));
+
+    public static final Block RED_SLIMELING_EGG = BLOCKS.registerWithItem(Constant.Block.RED_SLIMELING_EGG, new SlimelingEgg(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(0.75f).sound(SoundType.BASALT), SlimelingEggColor.RED));
+    public static final Block BLUE_SLIMELING_EGG = BLOCKS.registerWithItem(Constant.Block.BLUE_SLIMELING_EGG, new SlimelingEgg(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLUE).strength(0.75f).sound(SoundType.BASALT), SlimelingEggColor.BLUE));
+    public static final Block YELLOW_SLIMELING_EGG = BLOCKS.registerWithItem(Constant.Block.YELLOW_SLIMELING_EGG, new SlimelingEgg(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(0.75f).sound(SoundType.BASALT), SlimelingEggColor.YELLOW));
 
     // TORCHES
     public static final Block GLOWSTONE_TORCH = BLOCKS.register(Constant.Block.GLOWSTONE_TORCH, new GlowstoneTorchBlock(BlockBehaviour.Properties.of().noCollission().instabreak().lightLevel(blockStatex -> 14).sound(SoundType.WOOD).pushReaction(PushReaction.DESTROY)));

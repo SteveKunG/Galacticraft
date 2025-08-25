@@ -85,21 +85,27 @@ public class FogRendererMixin {
             fogRed = 0.41F;
             fogGreen = 0.78F;
             fogBlue = 0.25F;
+        } else if (player.isEyeInFluid(GCFluidTags.BACTERIAL_SLUDGE)) {
+            fogRed = 0.02F;
+            fogGreen = 0.24F;
+            fogBlue = 0.03F;
         }
     }
 
     @ModifyArg(method = "setupFog", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderFogStart(F)V", remap = false), index = 0)
     private static float gc$setShaderFogStart(float start, @Local FogType fogType) {
         Player player = Minecraft.getInstance().player;
+
+        // Default behavior
+        if (player == null) {
+            return start;
+        }
+
         if (fogType != FogType.NONE) {
-            if (player.isEyeInFluid(GCFluidTags.OIL)) {
-                return -8.0F;
-            } else if (player.isEyeInFluid(GCFluidTags.FUEL)) {
-                return -8.0F;
-            } else if (player.isEyeInFluid(GCFluidTags.SULFURIC_ACID)) {
+            if (player.isEyeInFluid(GCFluidTags.OIL) || player.isEyeInFluid(GCFluidTags.FUEL) || player.isEyeInFluid(GCFluidTags.SULFURIC_ACID) || player.isEyeInFluid(GCFluidTags.BACTERIAL_SLUDGE)) {
                 return -8.0F;
             }
-        } else if (player != null && player.getVehicle() instanceof RocketEntity) {
+        } else if (player.getVehicle() instanceof RocketEntity) {
             if (player.getY() > Constant.OVERWORLD_SKYPROVIDER_STARTHEIGHT + 200) {
                 return Float.MAX_VALUE;
             } else {
@@ -118,9 +124,7 @@ public class FogRendererMixin {
             Player player = Minecraft.getInstance().player;
             if (player.isEyeInFluid(GCFluidTags.OIL)) {
                 return 8.0F;
-            } else if (player.isEyeInFluid(GCFluidTags.FUEL)) {
-                return 12.0F;
-            } else if (player.isEyeInFluid(GCFluidTags.SULFURIC_ACID)) {
+            } else if (player.isEyeInFluid(GCFluidTags.FUEL) || player.isEyeInFluid(GCFluidTags.SULFURIC_ACID) || player.isEyeInFluid(GCFluidTags.BACTERIAL_SLUDGE)) {
                 return 12.0F;
             }
         }

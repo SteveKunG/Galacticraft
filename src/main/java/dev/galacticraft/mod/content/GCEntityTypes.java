@@ -125,6 +125,12 @@ public class GCEntityTypes {
             .eyeHeight(1.25F)
             .clientTrackingRange(8)
             .build());
+    public static final EntityType<Slimeling> SLIMELING = ENTITIES.register(Entity.SLIMELING, EntityType.Builder.of(Slimeling::new, MobCategory.CREATURE)
+            .sized(1.0F, 1.0F)
+            .build());
+    public static final EntityType<Sludgeling> SLUDGELING = ENTITIES.register(Entity.SLUDGELING, EntityType.Builder.of(Sludgeling::new, MobCategory.MONSTER)
+            .sized(0.3F, 0.2F)
+            .build());
 
     public static final EntityType<BubbleEntity> BUBBLE = ENTITIES.register(Entity.BUBBLE, EntityType.Builder.of(BubbleEntity::new, MobCategory.MISC)
             .fireImmune()
@@ -182,6 +188,7 @@ public class GCEntityTypes {
         FabricDefaultAttributeRegistry.register(EVOLVED_PILLAGER, EvolvedPillagerEntity.createAttributes().add(GcApiEntityAttributes.CAN_BREATHE_IN_SPACE, 1.0D).add(Attributes.MAX_HEALTH, 30.0D));
         FabricDefaultAttributeRegistry.register(EVOLVED_EVOKER, EvolvedEvokerEntity.createAttributes().add(GcApiEntityAttributes.CAN_BREATHE_IN_SPACE, 1.0D).add(Attributes.MAX_HEALTH, 30.0D));
         FabricDefaultAttributeRegistry.register(EVOLVED_VINDICATOR, EvolvedVindicatorEntity.createAttributes().add(GcApiEntityAttributes.CAN_BREATHE_IN_SPACE, 1.0D).add(Attributes.MAX_HEALTH, 30.0D));
+        FabricDefaultAttributeRegistry.register(SLIMELING, Slimeling.createAttributes().add(GcApiEntityAttributes.CAN_BREATHE_IN_SPACE, 1.0D));
         FabricDefaultAttributeRegistry.register(GAZER, GazerEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(RUMBLER, RumblerEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(COMET_CUBE, CometCubeEntity.createAttributes());
@@ -189,5 +196,6 @@ public class GCEntityTypes {
         FabricDefaultAttributeRegistry.register(GREY, GreyEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(ARCH_GREY, ArchGreyEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(SKELETON_BOSS, SkeletonBoss.createAttributes().add(GcApiEntityAttributes.CAN_BREATHE_IN_SPACE, 1.0D));
+        FabricDefaultAttributeRegistry.register(SLUDGELING, Sludgeling.createAttributes());
     }
 }

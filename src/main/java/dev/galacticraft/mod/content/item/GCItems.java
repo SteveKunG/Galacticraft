@@ -157,6 +157,7 @@ public class GCItems {
     public static final Item DESH_SWORD = ITEMS.register(Constant.Item.DESH_SWORD, new SwordItem(GCTiers.DESH, new Item.Properties().attributes(SwordItem.createAttributes(GCTiers.DESH, 3, -2.4F))));
     public static final Item DESH_SHOVEL = ITEMS.register(Constant.Item.DESH_SHOVEL, new ShovelItem(GCTiers.DESH, new Item.Properties().attributes(ShovelItem.createAttributes(GCTiers.DESH, -1.5F, -3.0F))));
     public static final Item DESH_PICKAXE = ITEMS.register(Constant.Item.DESH_PICKAXE, new PickaxeItem(GCTiers.DESH, new Item.Properties().attributes(PickaxeItem.createAttributes(GCTiers.DESH, 1.0F, -2.8F))));
+    public static final Item STICKY_DESH_PICKAXE = ITEMS.register(Constant.Item.STICKY_DESH_PICKAXE, new PickaxeItem(GCTiers.DESH, new Item.Properties().attributes(PickaxeItem.createAttributes(GCTiers.DESH, 1.0F, -2.8F))));
     public static final Item DESH_AXE = ITEMS.register(Constant.Item.DESH_AXE, new AxeItem(GCTiers.DESH, new Item.Properties().attributes(AxeItem.createAttributes(GCTiers.DESH, 6.0F, -3.1F))));
     public static final Item DESH_HOE = ITEMS.register(Constant.Item.DESH_HOE, new HoeItem(GCTiers.DESH, new Item.Properties().attributes(HoeItem.createAttributes(GCTiers.DESH, -3.0F, -1.0F))));
 
@@ -279,10 +280,14 @@ public class GCItems {
     public static final Item CRUDE_OIL_BUCKET = ITEMS.register(Constant.Item.CRUDE_OIL_BUCKET, new BucketItem(GCFluids.CRUDE_OIL, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
     public static final Item FUEL_BUCKET = ITEMS.register(Constant.Item.FUEL_BUCKET, new BucketItem(GCFluids.FUEL, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
     public static final Item SULFURIC_ACID_BUCKET = ITEMS.register(Constant.Item.SULFURIC_ACID_BUCKET, new BucketItem(GCFluids.SULFURIC_ACID, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+    public static final Item BACTERIAL_SLUDGE_BUCKET = ITEMS.register(Constant.Item.BACTERIAL_SLUDGE_BUCKET, new BucketItem(GCFluids.BACTERIAL_SLUDGE, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
     // CANNED FOOD
     public static final CannedFoodItem EMPTY_CAN = ITEMS.register(Constant.Item.EMPTY_CAN, new CannedFoodItem(new Item.Properties().food(null)));
     public static final CannedFoodItem CANNED_FOOD = ITEMS.register(Constant.Item.CANNED_FOOD, new CannedFoodItem(new Item.Properties().food(new FoodProperties.Builder().nutrition(0).saturationModifier(0).build()).stacksTo(1)));
+
+    // SLIMELING
+    public static final Item SLIMELING_INVENTORY_BAG = ITEMS.register(Constant.Item.SLIMELING_INVENTORY_BAG, new Item(new Item.Properties().stacksTo(1)));
 
     // SPAWN EGGS
     public static final Item MOON_VILLAGER_SPAWN_EGG = ITEMS.register(Constant.SpawnEgg.MOON_VILLAGER, new SpawnEggItem(GCEntityTypes.MOON_VILLAGER, 0x74a3cf, 0xba2500, new Item.Properties()));
@@ -301,6 +306,8 @@ public class GCItems {
     public static final Item OLI_GRUB_SPAWN_EGG = ITEMS.register(Constant.SpawnEgg.OLI_GRUB, new SpawnEggItem(GCEntityTypes.OLI_GRUB, 0xd4dd7e, 0xa4bf63, new Item.Properties()));
     public static final Item GREY_SPAWN_EGG = ITEMS.register(Constant.SpawnEgg.GREY, new SpawnEggItem(GCEntityTypes.GREY, 0x656463, 0x769e41, new Item.Properties()));
     public static final Item ARCH_GREY_SPAWN_EGG = ITEMS.register(Constant.SpawnEgg.ARCH_GREY, new SpawnEggItem(GCEntityTypes.ARCH_GREY, 0x656463, 0x2d8563, new Item.Properties()));
+    public static final Item SLIMELING_SPAWN_EGG = ITEMS.register(Constant.SpawnEgg.SLIMELING, new SpawnEggItem(GCEntityTypes.SLIMELING, 0x105c20, 0x1ddb23, new Item.Properties()));
+    public static final Item SLUDGELING_SPAWN_EGG = ITEMS.register(Constant.SpawnEgg.SLUDGELING, new SpawnEggItem(GCEntityTypes.SLUDGELING, 0x004500, 0x002a00, new Item.Properties()));
 
     private static Item registerGeneric(String id) {
         return ITEMS.register(id, new Item(new Item.Properties()));
@@ -310,6 +317,7 @@ public class GCItems {
         DispenserBlock.registerBehavior(FUEL_BUCKET, DispenserBlock.DISPENSER_REGISTRY.get(Items.WATER_BUCKET));
         DispenserBlock.registerBehavior(CRUDE_OIL_BUCKET, DispenserBlock.DISPENSER_REGISTRY.get(Items.WATER_BUCKET));
         DispenserBlock.registerBehavior(SULFURIC_ACID_BUCKET, DispenserBlock.DISPENSER_REGISTRY.get(Items.WATER_BUCKET));
+        DispenserBlock.registerBehavior(BACTERIAL_SLUDGE_BUCKET, DispenserBlock.DISPENSER_REGISTRY.get(Items.WATER_BUCKET));
 
         DispenserBlock.registerBehavior(MOON_VILLAGER_SPAWN_EGG, DispenserBlock.DISPENSER_REGISTRY.get(Items.CREEPER_SPAWN_EGG));
         DispenserBlock.registerBehavior(EVOLVED_ZOMBIE_SPAWN_EGG, DispenserBlock.DISPENSER_REGISTRY.get(Items.CREEPER_SPAWN_EGG));

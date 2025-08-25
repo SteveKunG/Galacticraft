@@ -52,7 +52,9 @@ public class GCEntityTypeTagProvider extends FabricTagProvider.EntityTypeTagProv
                 .add(GCEntityTypes.EVOLVED_WITCH)
                 .add(GCEntityTypes.EVOLVED_PILLAGER)
                 .add(GCEntityTypes.EVOLVED_EVOKER)
-                .add(GCEntityTypes.EVOLVED_VINDICATOR);
+                .add(GCEntityTypes.EVOLVED_VINDICATOR)
+                .add(GCEntityTypes.SLIMELING)
+                .add(GCEntityTypes.SLUDGELING);
         this.getOrCreateTagBuilder(EntityTypeTags.CAN_BREATHE_UNDER_WATER)
                 .addTag(GCEntityTypeTags.HAS_OXYGEN_SETUP);
 
@@ -83,6 +85,7 @@ public class GCEntityTypeTagProvider extends FabricTagProvider.EntityTypeTagProv
                 .add(GCEntityTypes.EVOLVED_EVOKER)
                 .add(GCEntityTypes.EVOLVED_VINDICATOR);
         this.getOrCreateTagBuilder(EntityTypeTags.ARTHROPOD)
-                .add(GCEntityTypes.EVOLVED_SPIDER);
+                .add(GCEntityTypes.EVOLVED_SPIDER)
+                .add(GCEntityTypes.SLUDGELING);
     }
 }

@@ -38,6 +38,7 @@ import dev.galacticraft.mod.content.block.machine.ResourceStorageBlock;
 import dev.galacticraft.mod.content.block.special.ParachestBlock;
 import dev.galacticraft.mod.content.block.special.RocketWorkbench;
 import dev.galacticraft.mod.content.block.special.launchpad.AbstractLaunchPad;
+import dev.galacticraft.mod.content.block.special.slimeling_egg.SlimelingEgg;
 import dev.galacticraft.mod.content.item.GCItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
@@ -371,11 +372,28 @@ public class GCModelProvider extends FabricModelProvider {
         generator.createNonTemplateModelBlock(GCBlocks.CRUDE_OIL);
         generator.createNonTemplateModelBlock(GCBlocks.FUEL);
         generator.createNonTemplateModelBlock(GCBlocks.SULFURIC_ACID);
+        generator.createNonTemplateModelBlock(GCBlocks.BACTERIAL_SLUDGE);
 
         generator.createTrivialCube(GCBlocks.AIR_LOCK_FRAME);
         this.createAirLockController(generator);
 
         this.createParachests(generator);
+
+        this.createSlimelingEggModel(generator, GCBlocks.RED_SLIMELING_EGG);
+        this.createSlimelingEggModel(generator, GCBlocks.BLUE_SLIMELING_EGG);
+        this.createSlimelingEggModel(generator, GCBlocks.YELLOW_SLIMELING_EGG);
+    }
+
+    private void createSlimelingEggModel(BlockModelGenerators generator, Block block) {
+        var mapping = new TextureMapping().put(GCTextureSlot.EGG, ModelLocationUtils.getModelLocation(block));
+        var crackedMapping = new TextureMapping().put(GCTextureSlot.EGG, ModelLocationUtils.getModelLocation(block, "_cracked"));
+        var eggModel = GCModelTemplates.SLIMELING_EGG.create(ModelLocationUtils.getModelLocation(block), mapping, generator.modelOutput);
+        var crackedEggModel = GCModelTemplates.SLIMELING_EGG.create(ModelLocationUtils.getModelLocation(block, "_cracked"), crackedMapping, generator.modelOutput);
+
+        generator.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block)
+                .with(PropertyDispatch.property(SlimelingEgg.CRACKED)
+                        .select(true, Variant.variant().with(VariantProperties.MODEL, crackedEggModel))
+                        .select(false, Variant.variant().with(VariantProperties.MODEL, eggModel))));
     }
 
     private static void createFullCubeActiveMachine(BlockModelGenerators generator, Block block) {
@@ -708,6 +726,7 @@ public class GCModelProvider extends FabricModelProvider {
         generator.generateFlatItem(GCItems.DESH_SWORD, ModelTemplates.FLAT_HANDHELD_ITEM);
         generator.generateFlatItem(GCItems.DESH_SHOVEL, ModelTemplates.FLAT_HANDHELD_ITEM);
         generator.generateFlatItem(GCItems.DESH_PICKAXE, ModelTemplates.FLAT_HANDHELD_ITEM);
+        generator.generateFlatItem(GCItems.STICKY_DESH_PICKAXE, ModelTemplates.FLAT_HANDHELD_ITEM);
         generator.generateFlatItem(GCItems.DESH_AXE, ModelTemplates.FLAT_HANDHELD_ITEM);
         generator.generateFlatItem(GCItems.DESH_HOE, ModelTemplates.FLAT_HANDHELD_ITEM);
 
@@ -730,6 +749,7 @@ public class GCModelProvider extends FabricModelProvider {
         generator.generateFlatItem(GCItems.CRUDE_OIL_BUCKET, ModelTemplates.FLAT_ITEM);
         generator.generateFlatItem(GCItems.FUEL_BUCKET, ModelTemplates.FLAT_ITEM);
         generator.generateFlatItem(GCItems.SULFURIC_ACID_BUCKET, ModelTemplates.FLAT_ITEM);
+        generator.generateFlatItem(GCItems.BACTERIAL_SLUDGE_BUCKET, ModelTemplates.FLAT_ITEM);
 
         // GALACTICRAFT INVENTORY
         generator.generateFlatItem(GCItems.PARACHUTE, ModelTemplates.FLAT_ITEM);
@@ -781,6 +801,7 @@ public class GCModelProvider extends FabricModelProvider {
         generator.generateFlatItem(GCItems.MOON_BUGGY_SCHEMATIC, ModelTemplates.FLAT_ITEM);
         generator.generateFlatItem(GCItems.TIER_3_ROCKET_SCHEMATIC, ModelTemplates.FLAT_ITEM);
         generator.generateFlatItem(GCItems.ASTRO_MINER_SCHEMATIC, ModelTemplates.FLAT_ITEM);
+        generator.generateFlatItem(GCItems.SLIMELING_INVENTORY_BAG, ModelTemplates.FLAT_ITEM);
 
         // LEGACY MUSIC DISCS
         generator.generateFlatItem(GCItems.LEGACY_MUSIC_DISC_MARS, ModelTemplates.FLAT_ITEM);
@@ -809,6 +830,8 @@ public class GCModelProvider extends FabricModelProvider {
         generator.generateFlatItem(GCItems.OLI_GRUB_SPAWN_EGG, GCModelTemplates.SPAWN_EGG);
         generator.generateFlatItem(GCItems.GREY_SPAWN_EGG, GCModelTemplates.SPAWN_EGG);
         generator.generateFlatItem(GCItems.ARCH_GREY_SPAWN_EGG, GCModelTemplates.SPAWN_EGG);
+        generator.generateFlatItem(GCItems.SLIMELING_SPAWN_EGG, GCModelTemplates.SPAWN_EGG);
+        generator.generateFlatItem(GCItems.SLUDGELING_SPAWN_EGG, GCModelTemplates.SPAWN_EGG);
     }
 
     private void createLayeredItem(ItemModelGenerators generator, Item item, String overlay) {

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "galacticraft:item/sticky_desh_pickaxe"
+  }
+}

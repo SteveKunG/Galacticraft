@@ -247,6 +247,12 @@ public class GCEntityLoot extends GCEntityLootSubProvider {
                                         .add(LootItem.lootTableItem(Items.WITHER_SKELETON_SKULL))
                         )
         );
+        this.add(GCEntityTypes.SLIMELING, LootTable.lootTable()
+                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(Items.SLIME_BALL)
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F))))));
+        this.add(GCEntityTypes.SLUDGELING, this.noDrops());
     }
 
     @Override

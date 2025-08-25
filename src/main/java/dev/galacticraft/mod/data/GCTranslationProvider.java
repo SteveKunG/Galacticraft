@@ -526,6 +526,7 @@ public class GCTranslationProvider extends TranslationProvider {
         this.item(GCItems.CRUDE_OIL_BUCKET, "Oil Bucket");
         this.item(GCItems.FUEL_BUCKET, "Fuel Bucket");
         this.item(GCItems.SULFURIC_ACID_BUCKET, "Sulfuric Acid Bucket");
+        this.item(GCItems.BACTERIAL_SLUDGE_BUCKET, "Bacterial Sludge Bucket");
 
         // GALACTICRAFT INVENTORY
         this.item(GCItems.PARACHUTE, "Parachute");
