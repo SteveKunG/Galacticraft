@@ -652,7 +652,10 @@ public class GCBlockTagProvider extends FabricTagProvider.BlockTagProvider {
                         GCBlocks.MOON_BASALT_BRICK,
                         GCBlocks.CRACKED_MOON_BASALT_BRICK,
                         GCBlocks.MARS_STONE,
-                        GCBlocks.MARS_COBBLESTONE
+                        GCBlocks.MARS_COBBLESTONE,
+                        GCBlocks.RED_SLIMELING_EGG,
+                        GCBlocks.BLUE_SLIMELING_EGG,
+                        GCBlocks.YELLOW_SLIMELING_EGG
                 );
 
         this.tag(BlockTags.MINEABLE_WITH_AXE)

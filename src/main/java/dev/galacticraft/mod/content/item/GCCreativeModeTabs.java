@@ -126,6 +126,11 @@ public class GCCreativeModeTabs {
                 output.accept(MARS_COBBLESTONE_SLAB);
                 output.accept(MARS_COBBLESTONE_WALL);
 
+                // SLIMELING
+                output.accept(RED_SLIMELING_EGG);
+                output.accept(BLUE_SLIMELING_EGG);
+                output.accept(YELLOW_SLIMELING_EGG);
+
                 // ASTEROID NATURAL
                 output.accept(ASTEROID_ROCK);
                 output.accept(ASTEROID_ROCK_1);
@@ -373,6 +378,7 @@ public class GCCreativeModeTabs {
                 output.accept(CARBON_FRAGMENTS);
                 output.accept(ATMOSPHERIC_VALVE);
                 output.accept(FLUID_MANIPULATOR);
+                output.accept(SLIMELING_INVENTORY_BAG);
                 output.accept(AMBIENT_THERMAL_CONTROLLER);
                 output.accept(ORION_DRIVE);
 
@@ -434,6 +440,7 @@ public class GCCreativeModeTabs {
                 output.accept(DESH_SWORD);
                 output.accept(DESH_SHOVEL);
                 output.accept(DESH_PICKAXE);
+                output.accept(STICKY_DESH_PICKAXE);
                 output.accept(DESH_AXE);
                 output.accept(DESH_HOE);
 
@@ -484,6 +491,7 @@ public class GCCreativeModeTabs {
                 output.accept(CRUDE_OIL_BUCKET);
                 output.accept(FUEL_BUCKET);
                 output.accept(SULFURIC_ACID_BUCKET);
+                output.accept(BACTERIAL_SLUDGE_BUCKET);
             })
             .build();
 
@@ -524,6 +532,8 @@ public class GCCreativeModeTabs {
             content.addAfter(ItemStack.EMPTY, OLI_GRUB_SPAWN_EGG);
             content.addAfter(ItemStack.EMPTY, GREY_SPAWN_EGG);
             content.addAfter(ItemStack.EMPTY, ARCH_GREY_SPAWN_EGG);
+            content.addAfter(ItemStack.EMPTY, SLIMELING_SPAWN_EGG);
+            content.addAfter(ItemStack.EMPTY, SLUDGELING_SPAWN_EGG);
         });
     }
 

@@ -47,6 +47,8 @@ public class ScreenEffectRendererMixin {
     private static final ResourceLocation FUEL_LOCATION = Constant.id("textures/misc/fuel_overlay.png");
     @Unique
     private static final ResourceLocation ACID_LOCATION = Constant.id("textures/misc/sulfuric_acid_overlay.png");
+    @Unique
+    private static final ResourceLocation BACTERIAL_SLUDGE_LOCATION = Constant.id("textures/misc/bacterial_sludge_overlay.png");
 
     @Inject(method = "renderScreenEffect", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isEyeInFluid(Lnet/minecraft/tags/TagKey;)Z"), cancellable = true)
     private static void gc$fluidOverlays(Minecraft minecraft, PoseStack poseStack, CallbackInfo ci) {
@@ -56,6 +58,8 @@ public class ScreenEffectRendererMixin {
             gc$renderFluidOverlay(minecraft, poseStack, FUEL_LOCATION);
         } else if (minecraft.player.isEyeInFluid(GCFluidTags.SULFURIC_ACID)) {
             gc$renderFluidOverlay(minecraft, poseStack, ACID_LOCATION);
+        } else if (minecraft.player.isEyeInFluid(GCFluidTags.BACTERIAL_SLUDGE)) {
+            gc$renderFluidOverlay(minecraft, poseStack, BACTERIAL_SLUDGE_LOCATION);
         }
     }
 

@@ -250,6 +250,9 @@ public interface Constant {
         String WEB_TORCH = "web_torch";
         String FALLEN_METEOR = "fallen_meteor";
         String SLIMELING_EGG = "slimeling_egg";
+        String RED_SLIMELING_EGG = "red_slimeling_egg";
+        String BLUE_SLIMELING_EGG = "blue_slimeling_egg";
+        String YELLOW_SLIMELING_EGG = "yellow_slimeling_egg";
         String CREEPER_EGG = "creeper_egg";
 
         // Special
@@ -289,6 +292,7 @@ public interface Constant {
         String FUEL = "fuel";
         String CRUDE_OIL = "crude_oil";
         String SULFURIC_ACID = "sulfuric_acid";
+        String BACTERIAL_SLUDGE = "bacterial_sludge";
 
         // Machines
         String CIRCUIT_FABRICATOR = "circuit_fabricator";
@@ -386,8 +390,8 @@ public interface Constant {
         String CRUDE_OIL_STILL = "crude_oil_still";
         String FUEL_FLOWING = "fuel_flowing";
         String FUEL_STILL = "fuel_still";
-        String BACTERIAL_ACID_FLOWING = "bacterial_acid_flowing";
-        String BACTERIAL_ACID_STILL = "bacterial_acid_still";
+        String BACTERIAL_SLUDGE_FLOWING = "bacterial_sludge_flowing";
+        String BACTERIAL_SLUDGE_STILL = "bacterial_sludge_still";
         String SULFURIC_ACID_FLOWING = "sulfuric_acid_flowing";
         String SULFURIC_ACID_STILL = "sulfuric_acid_still";
         String OXYGEN_GAS = "oxygen_gas";
@@ -503,6 +507,7 @@ public interface Constant {
         String DESH_SWORD = "desh_sword";
         String DESH_SHOVEL = "desh_shovel";
         String DESH_PICKAXE = "desh_pickaxe";
+        String STICKY_DESH_PICKAXE = "sticky_desh_pickaxe";
         String DESH_AXE = "desh_axe";
         String DESH_HOE = "desh_hoe";
 
@@ -522,6 +527,7 @@ public interface Constant {
         String CRUDE_OIL_BUCKET = "crude_oil_bucket";
         String FUEL_BUCKET = "fuel_bucket";
         String SULFURIC_ACID_BUCKET = "sulfuric_acid_bucket";
+        String BACTERIAL_SLUDGE_BUCKET = "bacterial_sludge_bucket";
 
         //GC INVENTORY
         String PARACHUTE = "parachute";
@@ -577,6 +583,8 @@ public interface Constant {
         String BASIC_ROCKET_BODY_SCHEMATIC = "basic_rocket_body_schematic";
         String BASIC_ROCKET_FINS_SCHEMATIC = "basic_rocket_fins_schematic";
         String BASIC_ROCKET_ENGINE_SCHEMATIC = "basic_rocket_engine_schematic";
+
+        String SLIMELING_INVENTORY_BAG = "slimeling_inventory_bag";
     }
 
     interface Particle {
@@ -586,6 +594,8 @@ public interface Constant {
         String FALLING_FUEL = "falling_fuel";
         String DRIPPING_SULFURIC_ACID = "dripping_sulfuric_acid";
         String FALLING_SULFURIC_ACID = "falling_sulfuric_acid";
+        String DRIPPING_BACTERIAL_SLUDGE = "dripping_bacterial_sludge";
+        String FALLING_BACTERIAL_SLUDGE = "falling_bacterial_sludge";
 
         String CRYOGENIC_PARTICLE = "cryogenic_particle";
         String LANDER_FLAME = "lander_flame_particle";
@@ -935,6 +945,8 @@ public interface Constant {
         String GAZER = "gazer";
         String FALLING_METEOR = "falling_meteor";
         String EVOLVED_SKELETON_BOSS = "evolved_skeleton_boss";
+        String SLIMELING = "slimeling";
+        String SLUDGELING = "sludgeling";
     }
 
     interface SpawnEgg {
@@ -954,6 +966,8 @@ public interface Constant {
         String OLI_GRUB = "oli_grub_spawn_egg";
         String COMET_CUBE = "comet_cube_spawn_egg";
         String GAZER = "gazer_spawn_egg";
+        String SLIMELING = "slimeling_spawn_egg";
+        String SLUDGELING = "sludgeling_spawn_egg";
     }
 
     interface EntityTexture {
@@ -967,6 +981,7 @@ public interface Constant {
         String COMET_CUBE = "textures/entity/comet_cube.png";
         String GAZER = "textures/entity/gazer.png";
         String LANDER = "textures/entity/lander.png";
+        String SLIMELING = "textures/entity/slimeling.png";
         String SKELETON_BOSS = "textures/entity/skeletonboss.png";
     }
 

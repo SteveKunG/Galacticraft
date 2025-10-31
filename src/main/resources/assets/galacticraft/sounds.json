@@ -95,12 +95,9 @@
       }
     ]
   },
-  "entity.slime_death": {
+  "entity.slimeling.death": {
     "sounds": [
-      {
-        "name": "galacticraft:entity/slime_death",
-        "stream": false
-      }
+      "galacticraft:entity/slimeling/death"
     ]
   },
   "entity.ooh": {

@@ -41,6 +41,8 @@ public class GCEntityModelLayer {
     public static final ModelLayerLocation LANDER = registerModelLayer("lander");
     public static final ModelLayerLocation PARACHEST = registerModelLayer("parachest");
     public static final ModelLayerLocation MOON_VILLAGER = registerModelLayer("moon_villager");
+    public static final ModelLayerLocation SLIMELING = registerModelLayer("slimeling");
+    public static final ModelLayerLocation SLUDGELING = registerModelLayer("sludgeling");
 
     // Bosses
     public static final ModelLayerLocation SKELETON_BOSS = registerModelLayer("skeleton_boss");
@@ -63,6 +65,8 @@ public class GCEntityModelLayer {
         EntityModelLayerRegistry.registerModelLayer(LANDER, LanderModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(PARACHEST, ParachestModel::createParachuteLayer);
         EntityModelLayerRegistry.registerModelLayer(MOON_VILLAGER, MoonVillagerModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(SLIMELING, SlimelingModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(SLUDGELING, SludgelingModel::createBodyLayer);
 
         EntityModelLayerRegistry.registerModelLayer(SKELETON_BOSS, EvolvedSkeletonBossModel::createBodyLayer);
 

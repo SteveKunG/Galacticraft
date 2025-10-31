@@ -102,6 +102,7 @@ public class GCItemTagProvider extends FabricTagProvider.ItemTagProvider {
         this.tag(ItemTags.PICKAXES)
                 .add(GCItems.HEAVY_DUTY_PICKAXE)
                 .add(GCItems.DESH_PICKAXE)
+                .add(GCItems.STICKY_DESH_PICKAXE)
                 .add(GCItems.TITANIUM_PICKAXE);
         this.tag(ItemTags.SHOVELS)
                 .add(GCItems.HEAVY_DUTY_SHOVEL)
@@ -114,6 +115,7 @@ public class GCItemTagProvider extends FabricTagProvider.ItemTagProvider {
         this.tag(ItemTags.CLUSTER_MAX_HARVESTABLES)
                 .add(GCItems.HEAVY_DUTY_PICKAXE)
                 .add(GCItems.DESH_PICKAXE)
+                .add(GCItems.STICKY_DESH_PICKAXE)
                 .add(GCItems.TITANIUM_PICKAXE);
         this.tag(ItemTags.HEAD_ARMOR)
                 .add(GCItems.HEAVY_DUTY_HELMET)
@@ -205,6 +207,21 @@ public class GCItemTagProvider extends FabricTagProvider.ItemTagProvider {
         this.tag(GCItemTags.BATTERIES)
                 .add(GCItems.BATTERY)
                 .add(GCItems.INFINITE_BATTERY);
+
+        // Slimeling
+        this.tag(GCItemTags.SLIMELING_FAVORITE_FOODS)
+                .add(
+                        Items.GOLD_INGOT,
+                        Items.FLINT_AND_STEEL,
+                        Items.BAKED_POTATO,
+                        Items.STONE_SWORD,
+                        Items.GUNPOWDER,
+                        Items.WOODEN_HOE,
+                        Items.EMERALD,
+                        Items.REPEATER
+                ).forceAddTag(ItemTags.FISHES).forceAddTag(ItemTags.BOATS);
+
+        this.tag(GCItemTags.SLIMELING_FOODS).add(Items.SLIME_BALL);
 
         // ORE TAGS
         this.tag(ItemTags.IRON_ORES)
